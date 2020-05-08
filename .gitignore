@@ -1,0 +1,5 @@
+secretkey.txt
+/env/*
+/__pycache__/*
+/.vscode/*
+/dietapp/__pycache__/*

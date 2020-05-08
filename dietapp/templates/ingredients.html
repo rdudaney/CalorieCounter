@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <a class="btn btn-primary btn-md mb-3" href="{{ url_for('new_ingredient') }}">Add</a>
+    {% if ingredients %}
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Brand</th>
+                <th scope="col">Fat</th>
+                <th scope="col">Carbs</th>
+                <th scope="col">Protein</th>
+                <th scope="col">Calories</th>
+            </tr>
+            </thead>
+            <tbody>
+                {% for i in ingredients %}
+                    <tr>
+                        <th scope="row"><a href="{{ url_for('update_ingredient', ingredient_id=i.id) }}">{{i.name}}</a></th>
+                        <td>{{i.brand}}</td>
+                        <td>{{i.fat}}</td>
+                        <td>{{i.carbs}}</td>
+                        <td>{{i.protein}}</td>
+                        <td>{{i.calories}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <h1>No Ingredients</h1>
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="content-section">
+        <form method="POST" action="">
+            {{form.hidden_tag()}}
+
+            <div class ="form-group">
+                {{form.name.label(class = "form-control-label")}}
+
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-contro-lg is-invalid")}}
+                    <div class = invalid-feedback>
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{form.name(class = "form-control form-control-lg")}}  
+                {% endif %} 
+
+                
+            </div>
+
+            <fieldset class = "form-group">
+                {% if meal.meal_ingredients %}
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Brand</th>
+                            <th scope="col">Serving Size</th>
+                            <th scope="col">Unit</th>
+                            <th scope="col">Fat</th>
+                            <th scope="col">Carbs</th>
+                            <th scope="col">Protein</th>
+                            <th scope="col">Calories</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            {% for mi in meal.meal_ingredients %}
+                                <tr>
+                                    <th scope="row"><a href="{{ url_for('update_ingredient', ingredient_id=mi.ingredient.id) }}">{{mi.ingredient.name}}</a></th>
+                                    <td>{{mi.ingredient.brand}}</td>
+
+                                    <td>
+                                        {% if form['amount' + loop.index0|string].errors %}
+                                            {{ form['amount' + loop.index0|string](class="form-control form-contro-sm is-invalid")}}
+                                            <div class = invalid-feedback>
+                                                {% for error in form['amount' + loop.index0|string].errors %}
+                                                    <span>{{ error }}</span>
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {{form['amount' + loop.index0|string](class = "form-control form-control-sm")}}     
+                                        {% endif %} 
+                
+                                        </td>
+                
+
+                                    <td>
+                                    {% if form['unit' + loop.index0|string].errors %}
+                                        {{ form['unit' + loop.index0|string](class="form-control form-contro-sm is-invalid")}}
+                                        <div class = invalid-feedback>
+                                            {% for error in form['unit' + loop.index0|string].errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{form['unit' + loop.index0|string](class = "btn btn-secondary dropdown-toggle")}}     
+                                    {% endif %} 
+
+                                    </td>
+
+
+                                    <td>{{mi.ingredient.fat}}</td>
+                                    <td>{{mi.ingredient.carbs}}</td>
+                                    <td>{{mi.ingredient.protein}}</td>
+                                    <td>{{mi.ingredient.calories}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                {% else %}
+                    <h1>No Ingredients</h1>
+                {% endif %}
+            </fieldset>
+        </form>
+    </div>
+{% endblock content %}
