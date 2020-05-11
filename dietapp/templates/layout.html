@@ -66,16 +66,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-
-    <script type=text/javascript>
-      $('#fat, #carbs, #protein').keyup(function(){
-          var fat = parseFloat($('#fat').val()) || 0;
-          var carbs = parseFloat($('#carbs').val()) || 0;
-          var protein = parseFloat($('#protein').val()) || 0;
-
-          $('#calories').val(9*fat + 4*carbs + 4*protein);    
-      });
-    </script>
+    {% block javascript %}{% endblock %}
 
 
 

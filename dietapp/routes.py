@@ -6,6 +6,7 @@ from dietapp import app, db, bcrypt
 from dietapp.forms import RegistrationForm, LoginForm, IngredientForm, MealForm
 from dietapp.models import User, Ingredients, Units, UnitType, Meals, MealIngredients
 from flask_login import login_user, current_user, logout_user, login_required
+from collections import namedtuple
 
 
 @app.route('/home', methods=['GET','POST'])
@@ -153,6 +154,24 @@ def meals():
     return render_template('meals.html',title='Meal', meals=meals)
 
 
+def create_ingr_list(meal):
+    ingr_list = []
+    for i,mi in enumerate(meal.meal_ingredients):
+        d = {}
+        d['Name'] = mi.ingredient.name
+        d['ServingUnit'] = Units.query.filter_by(id=mi.unit_id).with_entities(Units.name).first()
+        d['ServingAmount'] = mi.serv
+        d['Fat'] = mi.ingredient.fat
+        d['Carbs'] = mi.ingredient.carbs
+        d['Protein'] = mi.ingredient.protein
+        d['Calories'] = mi.ingredient.calories
+
+        ingr_list.append(d)
+
+    return ingr_list
+
+
+
 @app.route("/meals/<int:meal_id>/update")
 @login_required
 def update_meal(meal_id):
@@ -160,6 +179,7 @@ def update_meal(meal_id):
     if current_user != meal.author:
         abort(403)
     form = MealForm(meal)
+    ingr_list = create_ingr_list(meal)
 
-    return render_template('create_meal.html',title='Meal',form=form, meal=meal)
+    return render_template('create_meal.html',title='Meal',form=form, meal=meal, ingr_list=ingr_list)
 
