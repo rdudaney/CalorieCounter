@@ -31,10 +31,10 @@
                             <th scope="col">Brand</th>
                             <th scope="col">Serving Size</th>
                             <th scope="col">Unit</th>
-                            <th scope="col">Fat</th>
-                            <th scope="col">Carbs</th>
-                            <th scope="col">Protein</th>
-                            <th scope="col">Calories</th>
+                            <th scope="col">Fat (g)</th>
+                            <th scope="col">Carbs (g)</th>
+                            <th scope="col">Protein (g)</th>
+                            <th scope="col">Calories (g)</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -91,6 +91,35 @@
 {% endblock content %}
 
 
+{% block sidebar %}
+    <div class="content-section">
+        <h3>Totals</h3>
+        <table class="table table-borderless">
+            <tbody>
+                <tr>
+                    <th scope="row">Fat (g)</th>
+                    <td id="TotalFat"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Carbs (g)</th>
+                    <td id="TotalCarbs"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Protein (g)</th>
+                    <td id="TotalProtein"></td>
+                </tr>
+                <tr>
+                    <th scope="row">Calories</th>
+                    <td id="TotalCalories"></td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
+{% endblock sidebar %}
+
+
+
 {% block javascript %}
 <script type=text/javascript>
     $('.amount-input').keyup(function(event){
@@ -110,10 +139,6 @@
 
 
         var current_tb_val = parseFloat(textbox.val());
-
-        //name.value = parseFloat(textbox.val());
-
-        //fat
         ingrTable.rows[rownumber+1].cells[4].innerHTML = current_tb_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Fat"] || 0;
 
         ingrTable.rows[rownumber+1].cells[5].innerHTML = current_tb_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Carbs"] || 0;
@@ -122,6 +147,30 @@
 
         ingrTable.rows[rownumber+1].cells[7].innerHTML = current_tb_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Calories"] || 0;
 
+
+        calculateTotals();
+
     });
+
+    function calculateTotals(){
+        var table = document.getElementById("ingrTable");
+        var sumFat = 0;
+        var sumCarbs = 0;
+        var sumProtein = 0;
+        var sumCalories = 0;
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            sumFat += parseFloat(row.cells[4].innerHTML);
+            sumCarbs += parseFloat(row.cells[5].innerHTML);
+            sumProtein += parseFloat(row.cells[6].innerHTML);
+            sumCalories += parseFloat(row.cells[7].innerHTML);
+        }
+
+
+        document.getElementById("TotalFat").innerHTML = sumFat;
+        document.getElementById("TotalCarbs").innerHTML = sumCarbs;
+        document.getElementById("TotalProtein").innerHTML = sumProtein;        
+        document.getElementById("TotalCalories").innerHTML = sumCalories;
+    }
+
 </script>
 {% endblock javascript %}

@@ -43,7 +43,7 @@
     {% endif %}
     <main role="main" class="container">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-9">
                 {% with messages = get_flashed_messages(with_categories = true) %}
                   {% if messages %}
                     {% for category, message in messages%}
@@ -55,6 +55,11 @@
                 {% endwith %}
                 {% block content %}{% endblock %}
             </div>
+            <div class="col-md-3">
+              {% block sidebar %}{% endblock %}
+            </div>
+
+
         </div>
     </main>
     <!-- Optional JavaScript -->
