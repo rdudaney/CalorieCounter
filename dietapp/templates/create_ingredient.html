@@ -219,7 +219,8 @@
         var carbs = parseFloat($('#carbs').val()) || 0;
         var protein = parseFloat($('#protein').val()) || 0;
 
-        $('#calories').val(9*fat + 4*carbs + 4*protein);    
+        var total_calories = parseFloat(9*fat + 4*carbs + 4*protein).toFixed(1);
+        $('#calories').val(total_calories);    
     });
 </script>
 {% endblock javascript %}

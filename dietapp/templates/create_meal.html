@@ -72,7 +72,7 @@
 
                                     </td>
 
-
+                                    
                                     <td>{{mi.ingredient.fat}}</td>
                                     <td>{{mi.ingredient.carbs}}</td>
                                     <td>{{mi.ingredient.protein}}</td>
@@ -139,18 +139,24 @@
 
 
         var current_tb_val = parseFloat(textbox.val());
-        ingrTable.rows[rownumber+1].cells[4].innerHTML = current_tb_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Fat"] || 0;
-
-        ingrTable.rows[rownumber+1].cells[5].innerHTML = current_tb_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Carbs"] || 0;
- 
-        ingrTable.rows[rownumber+1].cells[6].innerHTML = current_tb_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Protein"] || 0;
-
-        ingrTable.rows[rownumber+1].cells[7].innerHTML = current_tb_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Calories"] || 0;
+        calculateRow(current_tb_val, ingr_list, ingrTable, rownumber)
 
 
         calculateTotals();
 
     });
+
+    function calculateRow(serving_amount_val, ingr_list, ingrTable, rownumber){
+        var fat_amount = serving_amount_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Fat"] || 0;
+        var carbs_amount =serving_amount_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Carbs"] || 0;
+        var protein_amount = serving_amount_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Protein"] || 0;
+        var calories_amount = serving_amount_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Calories"] || 0;
+    
+        ingrTable.rows[rownumber+1].cells[4].innerHTML = parseFloat(fat_amount).toFixed(1);
+        ingrTable.rows[rownumber+1].cells[5].innerHTML = parseFloat(carbs_amount).toFixed(1);
+        ingrTable.rows[rownumber+1].cells[6].innerHTML = parseFloat(protein_amount).toFixed(1);
+        ingrTable.rows[rownumber+1].cells[7].innerHTML = parseFloat(calories_amount).toFixed(1);
+    }
 
     function calculateTotals(){
         var table = document.getElementById("ingrTable");
