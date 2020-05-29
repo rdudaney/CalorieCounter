@@ -172,13 +172,20 @@ def create_ingr_list(meal):
 
 
         d = {}
-        d['id'] = mi.ingredient.id
-        d['Name'] = mi.ingredient.name
-        d['Brand'] = mi.ingredient.brand
-        d['Fat'] = mi.ingredient.fat
-        d['Carbs'] = mi.ingredient.carbs
-        d['Protein'] = mi.ingredient.protein
-        d['Calories'] = mi.ingredient.calories
+        d['IngrID'] = mi.ingredient.id
+        d['IngrName'] = mi.ingredient.name
+        d['IngrBrand'] = mi.ingredient.brand
+        d['IngrFat'] = mi.ingredient.fat
+        d['IngrCarbs'] = mi.ingredient.carbs
+        d['IngrProtein'] = mi.ingredient.protein
+        d['IngrCalories'] = mi.ingredient.calories
+        d['IngrWeightAmount'] = mi.ingredient.serv_weight
+        d['IngrVolumeAmount'] = mi.ingredient.serv_volume
+        d['IngrCountAmount'] = mi.ingredient.serv_count
+        d['IngrWeightUnitID'] = mi.ingredient.weight_unit_id
+        d['IngrVolumeUnitID'] = mi.ingredient.volume_unit_id
+        d['IngrCountUnitID'] = mi.ingredient.count_unit_id
+
         d['ServingUnit'] = serving_unit.name
         d['ServingAmount'] = mi.serv
         d['ServingFat'] = mi.ingredient.fat * mi.serv * serving_unit.conversion / (ingr_serving_amount * ingr_unit.conversion)
@@ -190,6 +197,19 @@ def create_ingr_list(meal):
 
     return ingr_list
 
+def create_unit_dict():
+    units = Units.query.all()
+    unit_dict = {}
+    for i,u in enumerate(units):
+        d = {}
+        d["id"] = u.id
+        d["Name"] = u.name
+        d["Conversion"] = u.conversion
+        d["UnitTypeID"] = u.unit_type_id
+
+        unit_dict[u.id] = d
+
+    return unit_dict
 
 
 @app.route("/meals/<int:meal_id>/update")
@@ -200,8 +220,9 @@ def update_meal(meal_id):
         abort(403)
     form = MealForm(meal)
     ingr_list = create_ingr_list(meal)
+    unit_dict = create_unit_dict()
 
-    return render_template('create_meal.html',title='Meal',form=form, meal=meal, ingr_list=ingr_list)
+    return render_template('create_meal.html',title='Meal',form=form, meal=meal, ingr_list=ingr_list, unit_dict = unit_dict)
 
 @app.route("/ingredients/<int:ingredient_id>/delete", methods=['POST'])
 @login_required

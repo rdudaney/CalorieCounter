@@ -40,8 +40,8 @@
                         <tbody>
                             {% for i in ingr_list %}
                                 <tr>
-                                    <th scope="row"><a href="{{ url_for('update_ingredient', ingredient_id=i.id) }}">{{i.Name}}</a></th>
-                                    <td>{{i.Brand}}</td>
+                                    <th scope="row"><a href="{{ url_for('update_ingredient', ingredient_id=i.IngrID) }}">{{i.IngrName}}</a></th>
+                                    <td>{{i.IngrBrand}}</td>
 
                                     <td>
                                         {% if form['amount' + loop.index0|string].errors %}
@@ -132,6 +132,7 @@
 
         var ingrTbl = document.getElementById("ingrTable");
         var ingr_list = {{ ingr_list|tojson }};
+        var unit_dict = {{ unit_dict|tojson }};
         
 
         var tr = textbox.parents('tr');
@@ -139,18 +140,44 @@
 
 
         var current_tb_val = parseFloat(textbox.val());
-        calculateRow(current_tb_val, ingr_list, ingrTable, rownumber)
 
-
+        calculateRow(current_tb_val, ingr_list, unit_dict, ingrTable, rownumber)
         calculateTotals();
 
     });
 
-    function calculateRow(serving_amount_val, ingr_list, ingrTable, rownumber){
-        var fat_amount = serving_amount_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Fat"] || 0;
-        var carbs_amount =serving_amount_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Carbs"] || 0;
-        var protein_amount = serving_amount_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Protein"] || 0;
-        var calories_amount = serving_amount_val / ingr_list[rownumber]["ServingAmount"] * ingr_list[rownumber]["Calories"] || 0;
+    function calculateRow(serving_amount_val, ingr_list, unit_dict, ingrTable, rownumber){
+        var ingr = ingr_list[rownumber];
+
+        var unit_dropdown = document.getElementById("unit" + rownumber);
+        var unit_dropdown_id = unit_dropdown.options[unit_dropdown.selectedIndex].value;
+
+        var unit_selected = unit_dict[unit_dropdown_id];
+
+        var ingr_unit_id = 0;
+        var ingr_serv_amount = -1;
+
+        switch(unit_selected["UnitTypeID"]){
+            case 1:
+                ingr_unit_id = ingr["IngrWeightUnitID"];
+                ingr_serv_amount = ingr["IngrWeightAmount"];
+                break;
+            case 2:
+                ingr_unit_id = ingr["IngrVolumeUnitID"];
+                ingr_serv_amount = ingr["IngrVolumeAmount"];
+                break;
+            case 3:
+                ingr_unit_id = ingr["IngrCountUnitID"];
+                ingr_serv_amount = ingr["IngrCountAmount"];
+                break;
+        }
+
+        ingr_unit = unit_dict[ingr_unit_id];
+
+        var fat_amount = ingr["IngrFat"] * serving_amount_val * unit_selected["Conversion"] /(ingr_serv_amount * ingr_unit["Conversion"]) || 0;
+        var carbs_amount =ingr["IngrCarbs"] * serving_amount_val * unit_selected["Conversion"] /(ingr_serv_amount * ingr_unit["Conversion"]) || 0;
+        var protein_amount = ingr["IngrProtein"] * serving_amount_val * unit_selected["Conversion"] /(ingr_serv_amount * ingr_unit["Conversion"]) || 0;
+        var calories_amount = ingr["IngrCalories"] * serving_amount_val * unit_selected["Conversion"] /(ingr_serv_amount * ingr_unit["Conversion"]) || 0;
     
         ingrTable.rows[rownumber+1].cells[4].innerHTML = parseFloat(fat_amount).toFixed(1);
         ingrTable.rows[rownumber+1].cells[5].innerHTML = parseFloat(carbs_amount).toFixed(1);
