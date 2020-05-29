@@ -1,23 +1,27 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    {% for meal in meals %}
-        <article class="media content-section">
-            <div class="media-body">
-                <div class="article-metadata">
-                    <a class="mr-2" href="#">{{ meal.author.username }}</a>
-                    <small class="text-muted">{{ meal.date_created.strftime('%Y-%m-%d') }}</small>
-                    <form class="article-button" action="{{ url_for('delete_meal', meal_id = meal.id) }}" method="POST">
-                        <input class="btn btn-danger btn-sm" type="submit" value="Delete">
-                    </form>
+    {% if meals %}
+        {% for meal in meals %}
+            <article class="media content-section">
+                <div class="media-body">
+                    <div class="article-metadata">
+                        <a class="mr-2" href="#">{{ meal.author.username }}</a>
+                        <small class="text-muted">{{ meal.date_created.strftime('%Y-%m-%d') }}</small>
+                        <form class="article-button" action="{{ url_for('delete_meal', meal_id = meal.id) }}" method="POST">
+                            <input class="btn btn-danger btn-sm" type="submit" value="Delete">
+                        </form>
+                    </div>
+                    <h2><a class="article-title" href="{{ url_for('update_meal', meal_id=meal.id) }}">{{ meal.name }}</a></h2>
+                    <ul>
+                        {% for mi in meal.meal_ingredients %}
+                            <li>{{ mi.ingredient.name }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
-                <h2><a class="article-title" href="{{ url_for('update_meal', meal_id=meal.id) }}">{{ meal.name }}</a></h2>
-                <ul>
-                    {% for mi in meal.meal_ingredients %}
-                        <li>{{ mi.ingredient.name }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </article>
-    {% endfor %}
+            </article>
+        {% endfor %}
+    {% else %}
+        <h1>No Meals</h1>
+    {% endif %}
 {% endblock content %}
