@@ -21,7 +21,8 @@ def home():
 @app.route('/ingredients')
 @login_required
 def ingredients():
-    ingredients = current_user.ingredients
+    #ingredients = current_user.ingredients
+    ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
     return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
 
 @app.route('/register', methods=['GET','POST'])
@@ -150,7 +151,7 @@ def update_ingredient(ingredient_id):
 @app.route("/meals")
 @login_required
 def meals():
-    meals = current_user.meals
+    meals = Meals.query.filter_by(user_id = current_user.id, obsolete = False).all()
     return render_template('meals.html',title='Meal', meals=meals)
 
 
@@ -182,4 +183,27 @@ def update_meal(meal_id):
     ingr_list = create_ingr_list(meal)
 
     return render_template('create_meal.html',title='Meal',form=form, meal=meal, ingr_list=ingr_list)
+
+@app.route("/ingredients/<int:ingredient_id>/delete", methods=['POST'])
+@login_required
+def delete_ingredient(ingredient_id):
+    ingredient = Ingredients.query.get_or_404(ingredient_id)
+    if current_user != ingredient.author:
+        abort(403)
+    ingredient.obsolete = True
+    db.session.commit()
+    flash('Your ingredient has been deleted', 'success')
+    return redirect(url_for('ingredients'))
+
+
+@app.route("/ingredients/<int:ingredient_id>/delete", methods=['POST'])
+@login_required
+def delete_meal(meal_id):
+    meal = Meals.query.get_or_404(meal_id)
+    if current_user != meal.author:
+        abort(403)
+    meal.obsolete = True
+    db.session.commit()
+    flash('Your meal has been deleted', 'success')
+    return redirect(url_for('meals'))
 
