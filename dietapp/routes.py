@@ -196,7 +196,7 @@ def delete_ingredient(ingredient_id):
     return redirect(url_for('ingredients'))
 
 
-@app.route("/ingredients/<int:ingredient_id>/delete", methods=['POST'])
+@app.route("/meals/<int:meal_id>/delete", methods=['POST'])
 @login_required
 def delete_meal(meal_id):
     meal = Meals.query.get_or_404(meal_id)
