@@ -158,14 +158,33 @@ def meals():
 def create_ingr_list(meal):
     ingr_list = []
     for i,mi in enumerate(meal.meal_ingredients):
+        serving_unit = Units.query.filter_by(id=mi.unit_id).first()
+
+        if(serving_unit.unit_type_id == 1):
+            ingr_unit = Units.query.filter_by(id=mi.ingredient.weight_unit_id).first()
+            ingr_serving_amount = mi.ingredient.serv_weight
+        elif(serving_unit.unit_type_id == 2):
+            ingr_unit = Units.query.filter_by(id=mi.ingredient.volume_unit_id).first()
+            ingr_serving_amount = mi.ingredient.serv_volume
+        else:
+            ingr_unit = Units.query.filter_by(id=mi.ingredient.count_unit_id).first()
+            ingr_serving_amount = mi.ingredient.serv_count
+
+
         d = {}
+        d['id'] = mi.ingredient.id
         d['Name'] = mi.ingredient.name
-        d['ServingUnit'] = Units.query.filter_by(id=mi.unit_id).with_entities(Units.name).first()
-        d['ServingAmount'] = mi.serv
+        d['Brand'] = mi.ingredient.brand
         d['Fat'] = mi.ingredient.fat
         d['Carbs'] = mi.ingredient.carbs
         d['Protein'] = mi.ingredient.protein
         d['Calories'] = mi.ingredient.calories
+        d['ServingUnit'] = serving_unit.name
+        d['ServingAmount'] = mi.serv
+        d['ServingFat'] = mi.ingredient.fat * mi.serv * serving_unit.conversion / (ingr_serving_amount * ingr_unit.conversion)
+        d['ServingCarbs'] = mi.ingredient.carbs * mi.serv * serving_unit.conversion / (ingr_serving_amount * ingr_unit.conversion)
+        d['ServingProtein'] = mi.ingredient.protein * mi.serv * serving_unit.conversion / (ingr_serving_amount * ingr_unit.conversion)
+        d['ServingCalories'] = mi.ingredient.calories * mi.serv * serving_unit.conversion / (ingr_serving_amount * ingr_unit.conversion)
 
         ingr_list.append(d)
 

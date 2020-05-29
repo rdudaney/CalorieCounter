@@ -57,6 +57,7 @@ class Ingredients(db.Model):
 class Units(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(100), nullable = False)
+    conversion = db.Column(db.Float, nullable = False)
     obsolete = db.Column(db.Boolean, nullable = False, default=False)
 
     unit_type_id = db.Column(db.Integer, db.ForeignKey('unit_type.id'), nullable = False)

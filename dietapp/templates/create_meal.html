@@ -29,7 +29,7 @@
                         <tr>
                             <th scope="col">Name</th>
                             <th scope="col">Brand</th>
-                            <th scope="col">Serving Size</th>
+                            <th scope="col">Amount</th>
                             <th scope="col">Unit</th>
                             <th scope="col">Fat (g)</th>
                             <th scope="col">Carbs (g)</th>
@@ -38,10 +38,10 @@
                         </tr>
                         </thead>
                         <tbody>
-                            {% for mi in meal.meal_ingredients %}
+                            {% for i in ingr_list %}
                                 <tr>
-                                    <th scope="row"><a href="{{ url_for('update_ingredient', ingredient_id=mi.ingredient.id) }}">{{mi.ingredient.name}}</a></th>
-                                    <td>{{mi.ingredient.brand}}</td>
+                                    <th scope="row"><a href="{{ url_for('update_ingredient', ingredient_id=i.id) }}">{{i.Name}}</a></th>
+                                    <td>{{i.Brand}}</td>
 
                                     <td>
                                         {% if form['amount' + loop.index0|string].errors %}
@@ -73,10 +73,10 @@
                                     </td>
 
                                     
-                                    <td>{{mi.ingredient.fat}}</td>
-                                    <td>{{mi.ingredient.carbs}}</td>
-                                    <td>{{mi.ingredient.protein}}</td>
-                                    <td>{{mi.ingredient.calories}}</td>
+                                    <td>{{'%0.1f'| format(i.ServingFat|float)}}</td>
+                                    <td>{{'%0.1f'| format(i.ServingCarbs|float)}}</td>
+                                    <td>{{'%0.1f'| format(i.ServingProtein|float)}}</td>
+                                    <td>{{'%0.1f'| format(i.ServingCalories|float)}}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
