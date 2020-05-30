@@ -67,7 +67,7 @@
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{form['unit' + loop.index0|string](class = "btn btn-secondary dropdown-toggle")}}     
+                                        {{form['unit' + loop.index0|string](class = "btn btn-secondary dropdown-toggle unit-dropdown")}}     
                                     {% endif %} 
 
                                     </td>
@@ -123,28 +123,35 @@
 {% block javascript %}
 <script type=text/javascript>
     $('.amount-input').keyup(function(event){
-    // play with event
-    // use $(this) to determine which element triggers this event
 
-        var textbox = $(this)
-        var name = document.getElementById("name");
-
-
-        var ingrTbl = document.getElementById("ingrTable");
-        var ingr_list = {{ ingr_list|tojson }};
-        var unit_dict = {{ unit_dict|tojson }};
-        
-
+        var textbox = $(this);
         var tr = textbox.parents('tr');
         var rownumber = tr.index();
 
 
-        var current_tb_val = parseFloat(textbox.val());
+        calculateVals(rownumber);
+
+
+    });
+    $('.unit-dropdown').change(function(event){
+        var dropdown = $(this);
+        var tr = dropdown.parents('tr');
+        var rownumber = tr.index();
+        
+        calculateVals(rownumber);
+    });
+
+    function calculateVals(rownumber) {
+        var ingrTbl = document.getElementById("ingrTable");
+        var ingr_list = {{ ingr_list|tojson }};
+        var unit_dict = {{ unit_dict|tojson }};
+
+        var tb = document.getElementById("amount" + rownumber);
+        var current_tb_val = parseFloat(tb.value);
 
         calculateRow(current_tb_val, ingr_list, unit_dict, ingrTable, rownumber)
         calculateTotals();
-
-    });
+    }
 
     function calculateRow(serving_amount_val, ingr_list, unit_dict, ingrTable, rownumber){
         var ingr = ingr_list[rownumber];
@@ -199,10 +206,10 @@
         }
 
 
-        document.getElementById("TotalFat").innerHTML = sumFat;
-        document.getElementById("TotalCarbs").innerHTML = sumCarbs;
-        document.getElementById("TotalProtein").innerHTML = sumProtein;        
-        document.getElementById("TotalCalories").innerHTML = sumCalories;
+        document.getElementById("TotalFat").innerHTML = sumFat.toFixed(1);
+        document.getElementById("TotalCarbs").innerHTML = sumCarbs.toFixed(1);
+        document.getElementById("TotalProtein").innerHTML = sumProtein.toFixed(1);        
+        document.getElementById("TotalCalories").innerHTML = sumCalories.toFixed(1);
     }
 
 </script>
