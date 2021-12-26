@@ -77,7 +77,18 @@ def getUnits(ingredient):
     if(ingredient.serv_count is not None):
         units += Units.query.filter_by(id =ingredient.count_unit_id).with_entities(Units.id, Units.name).all()
 
+    units = convert2list(units)
+
     return units
+
+def convert2list(unit_in):
+    unit_out = []
+    for row in unit_in:
+        new_tuple = (int(row[0]), str(row[1]))
+        unit_out.append(new_tuple)
+
+    return unit_out
+
 
 
 def MealForm(meal):
