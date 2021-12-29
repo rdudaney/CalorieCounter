@@ -165,7 +165,7 @@ def update_ingredient(ingredient_id):
         form.drop_volume.data = ingredient.volume_unit_id
         form.drop_count.data = ingredient.count_unit_id
 
-    return render_template('create_ingredient.html',title='Update Post',form=form, legend='Update Post')
+    return render_template('create_ingredient.html',title='Update Ingredient',form=form, legend='Update Ingredient')
 
 
 
