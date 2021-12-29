@@ -18,10 +18,27 @@ def home():
     return render_template('home.html', title='Home')
 
 
-@app.route('/ingredients')
+def parse_checkboxes(form):
+    ingredient_id_list = []
+    for v in form:
+        id = str(v).split("check")[1]
+        #print (str(v) + ": " + str(form[v]) + " - " + id[1])
+        if ("check" in v) and str(form[v]) == 'on':
+            ingredient_id_list.append(id)
+            print (str(v) + ": " + str(form[v]) + " - " + id)
+
+
+    print(ingredient_id_list)
+    return ingredient_id_list
+
+@app.route('/ingredients', methods=['GET','POST'])
 @login_required
 def ingredients():
-    #ingredients = current_user.ingredients
+    if request.method == 'POST':
+        #print("Check1: " + str(request.form.get("check1")))
+        #print("Check2: " + str(request.form.get("check2")))
+        ingredient_id_list = parse_checkboxes(request.form)
+        delete_ingredients(ingredient_id_list)
     ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
     return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
 
@@ -219,7 +236,6 @@ def create_unit_dict():
 @app.route("/meals/<int:meal_id>/update", methods=['GET','POST'])
 @login_required
 def update_meal(meal_id):
-    #TODO: Look into refresh behaviour, text boxes not resetting
     meal = Meals.query.get_or_404(meal_id)
     if current_user != meal.author:
         abort(403)
@@ -242,14 +258,15 @@ def update_meal(meal_id):
 
     return render_template('create_meal.html',title='Meal',form=form, meal=meal, ingr_list=ingr_list, unit_dict = unit_dict)
 
-@app.route("/ingredients/<int:ingredient_id>/delete", methods=['POST'])
+
 @login_required
-def delete_ingredient(ingredient_id):
-    ingredient = Ingredients.query.get_or_404(ingredient_id)
-    if current_user != ingredient.author:
-        abort(403)
-    ingredient.obsolete = True
-    db.session.commit()
+def delete_ingredients(ingredient_id_list):
+    for id in ingredient_id_list:
+        ingredient = Ingredients.query.get_or_404(id)
+        if current_user != ingredient.author:
+            abort(403)
+        ingredient.obsolete = True
+        db.session.commit()
     flash('Your ingredient has been deleted', 'success')
     return redirect(url_for('ingredients'))
 
