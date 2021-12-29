@@ -39,6 +39,8 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html',title='Register', form = form)
 
+
+
 @app.route('/', methods=['GET','POST'])
 @app.route('/login', methods=['GET','POST'])
 def login():
@@ -54,6 +56,8 @@ def login():
         else:
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html',title='Login', form = form)
+
+
 
 @app.route('/logout')
 @login_required
@@ -212,15 +216,29 @@ def create_unit_dict():
     return unit_dict
 
 
-@app.route("/meals/<int:meal_id>/update")
+@app.route("/meals/<int:meal_id>/update", methods=['GET','POST'])
 @login_required
 def update_meal(meal_id):
+    #TODO: Look into refresh behaviour, text boxes not resetting
     meal = Meals.query.get_or_404(meal_id)
     if current_user != meal.author:
         abort(403)
+
     form = MealForm(meal)
-    ingr_list = create_ingr_list(meal)
-    unit_dict = create_unit_dict()
+    if form.validate_on_submit():
+        print("Total Name: " + str(form.name.data))
+        print("Total Fat: " + str(request.form.get("total_fat")))
+        print("Total Carbs: " + str(request.form.get("total_carbs")))
+        print("Total Protein: " + str(request.form.get("total_protein")))
+        print("Total Calories: " + str(request.form.get("total_calories")))
+        #TODO: Update Meal info here
+        #TODO: Change create_meal to textfield
+        #print(form.TotalFat.data)
+        flash('Meal has been updated', 'success')
+        return redirect(url_for('update_meal',meal_id = meal.id))
+    elif request.method == 'GET':
+        ingr_list = create_ingr_list(meal)
+        unit_dict = create_unit_dict()
 
     return render_template('create_meal.html',title='Meal',form=form, meal=meal, ingr_list=ingr_list, unit_dict = unit_dict)
 

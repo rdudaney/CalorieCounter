@@ -86,36 +86,44 @@
                     <h1>No Ingredients</h1>
                 {% endif %}
             </fieldset>
+            <div class ="form-group">   
+                {{form.submit(class="btn btn-outline-info")}}
+            </div>
+            <div class="content-section">
+                <h3>Totals</h3>
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Fat (g)</th>
+                            <td id="TotalFat">{{meal.fat}}</td>
+                            <input type="hidden" id="TotalFatHidden" name="total_fat" value={{meal.fat}}/>
+                        </tr>
+                        <tr>
+                            <th scope="row">Carbs (g)</th>
+                            <td id="TotalCarbs">{{meal.carbs}}</td>
+                            <input type="hidden" id="TotalCarbsHidden" name="total_carbs" value={{meal.carbs}}/>
+                        </tr>
+                        <tr>
+                            <th scope="row">Protein (g)</th>
+                            <td id="TotalProtein">{{meal.protein}}</td>
+                            <input type="hidden" id="TotalProteinHidden" name="total_protein" value={{meal.protein}}/>
+                        </tr>
+                        <tr>
+                            <th scope="row">Calories</th>
+                            <td id="TotalCalories">{{meal.calories}}</td>
+                            <input type="hidden" id="TotalCaloriesHidden" name="total_calories" value={{meal.calories}}/>
+                        </tr>
+                    </tbody>
+    
+                </table>
+            </div>
         </form>
     </div>
 {% endblock content %}
 
 
 {% block sidebar %}
-    <div class="content-section">
-        <h3>Totals</h3>
-        <table class="table table-borderless">
-            <tbody>
-                <tr>
-                    <th scope="row">Fat (g)</th>
-                    <td id="TotalFat"></td>
-                </tr>
-                <tr>
-                    <th scope="row">Carbs (g)</th>
-                    <td id="TotalCarbs"></td>
-                </tr>
-                <tr>
-                    <th scope="row">Protein (g)</th>
-                    <td id="TotalProtein"></td>
-                </tr>
-                <tr>
-                    <th scope="row">Calories</th>
-                    <td id="TotalCalories"></td>
-                </tr>
-            </tbody>
-
-        </table>
-    </div>
+        
 {% endblock sidebar %}
 
 
@@ -139,6 +147,10 @@
         var rownumber = tr.index();
         
         calculateVals(rownumber);
+    });
+
+    $(window).load(function(event){
+        calculateTotals();
     });
 
     function calculateVals(rownumber) {
@@ -210,6 +222,11 @@
         document.getElementById("TotalCarbs").innerHTML = sumCarbs.toFixed(1);
         document.getElementById("TotalProtein").innerHTML = sumProtein.toFixed(1);        
         document.getElementById("TotalCalories").innerHTML = sumCalories.toFixed(1);
+
+        document.getElementById("TotalFatHidden").value = sumFat.toFixed(1);
+        document.getElementById("TotalCarbsHidden").value = sumCarbs.toFixed(1);
+        document.getElementById("TotalProteinHidden").value = sumProtein.toFixed(1);        
+        document.getElementById("TotalCaloriesHidden").value = sumCalories.toFixed(1);
     }
 
 </script>

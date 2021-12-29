@@ -77,6 +77,7 @@ def getUnits(ingredient):
     if(ingredient.serv_count is not None):
         units += Units.query.filter_by(id =ingredient.count_unit_id).with_entities(Units.id, Units.name).all()
 
+    #TODO: Can change this to the way that update_ingredient does it in routes.py
     units = convert2list(units)
 
     return units
@@ -94,6 +95,9 @@ def convert2list(unit_in):
 def MealForm(meal):
     class F(FlaskForm):
         name = StringField('Title',validators =[InputRequired()])
+        submit = SubmitField('Submit')
+        #total_fat = HiddenField('Total_Fat')
+
 
 
     for i,mi in enumerate(meal.meal_ingredients):
