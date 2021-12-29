@@ -95,8 +95,30 @@ def convert2list(unit_in):
 def MealForm(meal):
     class F(FlaskForm):
         name = StringField('Title',validators =[InputRequired()])
-        submit = SubmitField('Submit')
-        #total_fat = HiddenField('Total_Fat')
+        submit = SubmitField('Save Changes')
+        recipe = StringField('Recipe')
+        notes = TextAreaField('Notes')
+        favorite = BooleanField('Favorite')
+
+        serv_weight = DecimalField('Serving Size by Weight', validators =[Optional()])
+        serv_volume = DecimalField('Serving Size by Volume', validators =[Optional()])
+        serv_count = DecimalField('Serving Size by Count/Servings', validators =[Optional()])
+
+        drop_weight = SelectField('Unit Weight', coerce=int)
+        drop_volume = SelectField('Unit Volume', coerce=int)
+        drop_count = SelectField('Unit Count', coerce=int)
+
+        def validate(self):
+            if not super(IngredientForm, self).validate():
+                return False
+
+            if self.serv_weight.data is None and self.serv_volume.data is None and self.serv_count.data is None:
+                msg = 'Must enter at least one serving size'
+                self.serv_weight.errors.append(msg)
+                self.serv_volume.errors.append(msg)
+                self.serv_count.errors.append(msg)
+                return False
+            return True
 
 
 
@@ -110,6 +132,24 @@ def MealForm(meal):
 
     d = F()
     d.name.data = meal.name
+    d.recipe.data = meal.recipe
+    d.notes.data = meal.notes
+    d.favorite.data = meal.favorite
+
+
+    d.drop_weight.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=1).all()]
+    d.drop_volume.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=2).all()]
+    d.drop_count.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=3).all()]
+
+
+    d.serv_weight.data = meal.serv_weight
+    d.serv_volume.data = meal.serv_volume
+    d.serv_count.data = meal.serv_count
+
+    d.drop_weight.data = meal.weight_unit_id
+    d.drop_volume.data = meal.volume_unit_id
+    d.drop_count.data = meal.count_unit_id
+
     for i,mi in enumerate(meal.meal_ingredients):
         d['amount%d' % i].data=mi.serv
         d['unit%d' % i].data=mi.unit_id

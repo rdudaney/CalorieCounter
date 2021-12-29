@@ -34,7 +34,7 @@
                             <th scope="col">Fat (g)</th>
                             <th scope="col">Carbs (g)</th>
                             <th scope="col">Protein (g)</th>
-                            <th scope="col">Calories (g)</th>
+                            <th scope="col">Calories</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -86,9 +86,152 @@
                     <h1>No Ingredients</h1>
                 {% endif %}
             </fieldset>
+
+
+
+            <div class ="form-group">
+                {{form.recipe.label(class = "form-control-label")}}
+
+                {% if form.recipe.errors %}
+                    {{ form.recipe(class="form-control form-contro-sm is-invalid")}}
+                    <div class = invalid-feedback>
+                        {% for error in form.recipe.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{form.recipe(class = "form-control form-control-sm")}}  
+                {% endif %} 
+            </div>
+
+            <div class ="form-group">
+                {{form.notes.label(class = "form-control-label")}}
+
+                {% if form.notes.errors %}
+                    {{ form.notes(class="form-control form-contro-lg is-invalid")}}
+                    <div class = invalid-feedback>
+                        {% for error in form.notes.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{form.notes(class = "form-control form-control-lg")}}  
+                {% endif %} 
+            </div>
+
+            <div class ="form-group">
+                {{form.favorite.label(class = "form-control-label")}}
+
+                {% if form.favorite.errors %}
+                    {{ form.favorite(class="form-control form-contro-sm is-invalid")}}
+                    <div class = invalid-feedback>
+                        {% for error in form.favorite.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{form.favorite(class = "form-control form-control-sm")}}  
+                {% endif %} 
+            </div>
+            
+
+
+            <div class="form-row">
+                <div class ="form-group">
+                    {% if form.serv_weight.errors %}
+                        {{ form.serv_weight(class="form-control form-contro-sm is-invalid")}}
+                        <div class = invalid-feedback>
+                            {% for error in form.serv_weight.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{form.serv_weight(class = "form-control form-control-sm")}}     
+                    {% endif %} 
+                </div>
+
+                <div class ="form-group">
+                    {% if form.drop_weight.errors %}
+                        {{ form.drop_weight(class="form-control form-contro-sm is-invalid")}}
+                        <div class = invalid-feedback>
+                            {% for error in form.drop_weight.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{form.drop_weight(class = "btn btn-secondary dropdown-toggle")}}     
+                    {% endif %} 
+                </div>
+
+
+
+
+                <div class ="form-group">
+                    {% if form.serv_volume.errors %}
+                        {{ form.serv_volume(class="form-control form-contro-sm is-invalid")}}
+                        <div class = invalid-feedback>
+                            {% for error in form.serv_volume.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{form.serv_volume(class = "form-control form-control-sm")}}     
+                    {% endif %} 
+                </div>
+
+                <div class ="form-group">
+                    {% if form.drop_volume.errors %}
+                        {{ form.drop_volume(class="form-control form-contro-sm is-invalid")}}
+                        <div class = invalid-feedback>
+                            {% for error in form.drop_volume.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{form.drop_volume(class = "btn btn-secondary dropdown-toggle")}}     
+                    {% endif %} 
+                </div>
+
+
+                <div class ="form-group">
+                    {% if form.serv_count.errors %}
+                        {{ form.serv_count(class="form-control form-contro-sm is-invalid")}}
+                        <div class = invalid-feedback>
+                            {% for error in form.serv_count.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{form.serv_count(class = "form-control form-control-sm")}}     
+                    {% endif %} 
+                </div>
+
+                <div class ="form-group">
+                    {% if form.drop_count.errors %}
+                        {{ form.drop_count(class="form-control form-contro-sm is-invalid")}}
+                        <div class = invalid-feedback>
+                            {% for error in form.drop_count.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{form.drop_count(class = "btn btn-secondary dropdown-toggle")}}     
+                    {% endif %} 
+                </div>
+
+            </div>
+
             <div class ="form-group">   
                 {{form.submit(class="btn btn-outline-info")}}
             </div>
+
+
+            <a class="btn btn-primary btn-md mb-3" href="{{ url_for('ingredients') }}">Add Ingredient</a>
+
+
+
+
+
             <div class="content-section">
                 <h3>Totals</h3>
                 <table class="table table-borderless">
@@ -117,6 +260,10 @@
     
                 </table>
             </div>
+
+
+
+
         </form>
     </div>
 {% endblock content %}
