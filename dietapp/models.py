@@ -27,7 +27,7 @@ class User(db.Model, UserMixin):
 
 class Ingredients(db.Model):
     id = db.Column(db.Integer, primary_key = True)
-    brand = db.Column(db.String(100), nullable = False)
+    brand = db.Column(db.String(100))
     name = db.Column(db.String(100), nullable = False)
     date_created = db.Column(db.DateTime, nullable = False, default = datetime.utcnow )
     date_used = db.Column(db.DateTime)
