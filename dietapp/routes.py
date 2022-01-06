@@ -240,7 +240,8 @@ def update_meal(meal_id):
     if current_user != meal.author:
         abort(403)
 
-    form = MealForm(meal)
+    form = MealForm(meal) #TODO Will have to separate creation of form and entry of values due to post vs get
+    
     if form.validate_on_submit():
         print("Total Name: " + str(form.name.data))
         print("Total Fat: " + str(request.form.get("total_fat")))

@@ -91,46 +91,47 @@ def convert2list(unit_in):
     return unit_out
 
 
+class MealForm2(FlaskForm):
+    name = StringField('Title',validators =[InputRequired()])
+    submit = SubmitField('Save Changes')
+    recipe = StringField('Recipe')
+    notes = TextAreaField('Notes')
+    favorite = BooleanField('Favorite')
+
+    serv_weight = DecimalField('Serving Size by Weight', validators =[Optional()])
+    serv_volume = DecimalField('Serving Size by Volume', validators =[Optional()])
+    serv_count = DecimalField('Serving Size by Count/Servings', validators =[Optional()])
+
+    drop_weight = SelectField('Unit Weight', coerce=int)
+    drop_volume = SelectField('Unit Volume', coerce=int)
+    drop_count = SelectField('Unit Count', coerce=int)
+
+    def validate(self):
+        if not super(IngredientForm, self).validate():
+            return False
+
+        if self.serv_weight.data is None and self.serv_volume.data is None and self.serv_count.data is None:
+            msg = 'Must enter at least one serving size'
+            self.serv_weight.errors.append(msg)
+            self.serv_volume.errors.append(msg)
+            self.serv_count.errors.append(msg)
+            return False
+        return True
+
+
+
 
 def MealForm(meal):
-    class F(FlaskForm):
-        name = StringField('Title',validators =[InputRequired()])
-        submit = SubmitField('Save Changes')
-        recipe = StringField('Recipe')
-        notes = TextAreaField('Notes')
-        favorite = BooleanField('Favorite')
-
-        serv_weight = DecimalField('Serving Size by Weight', validators =[Optional()])
-        serv_volume = DecimalField('Serving Size by Volume', validators =[Optional()])
-        serv_count = DecimalField('Serving Size by Count/Servings', validators =[Optional()])
-
-        drop_weight = SelectField('Unit Weight', coerce=int)
-        drop_volume = SelectField('Unit Volume', coerce=int)
-        drop_count = SelectField('Unit Count', coerce=int)
-
-        def validate(self):
-            if not super(IngredientForm, self).validate():
-                return False
-
-            if self.serv_weight.data is None and self.serv_volume.data is None and self.serv_count.data is None:
-                msg = 'Must enter at least one serving size'
-                self.serv_weight.errors.append(msg)
-                self.serv_volume.errors.append(msg)
-                self.serv_count.errors.append(msg)
-                return False
-            return True
-
-
 
     for i,mi in enumerate(meal.meal_ingredients):
         ingredient = meal.meal_ingredients[i].ingredient
         units = getUnits(ingredient)
 
-        setattr(F,'amount%d' % ingredient.id, DecimalField('Amount%d' % ingredient.id))
-        setattr(F,'unit%d' % ingredient.id, SelectField('Unit%d' % ingredient.id, coerce=int,choices=units))
+        setattr(MealForm2,'amount%d' % ingredient.id, DecimalField('Amount%d' % ingredient.id))
+        setattr(MealForm2,'unit%d' % ingredient.id, SelectField('Unit%d' % ingredient.id, coerce=int,choices=units))
         
 
-    d = F()
+    d = MealForm2()
     d.name.data = meal.name
     d.recipe.data = meal.recipe
     d.notes.data = meal.notes
