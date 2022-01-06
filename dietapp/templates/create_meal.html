@@ -44,30 +44,30 @@
                                     <td>{{i.IngrBrand}}</td>
 
                                     <td>
-                                        {% if form['amount' + loop.index0|string].errors %}
-                                            {{ form['amount' + loop.index0|string](class="form-control form-contro-sm is-invalid")}}
+                                        {% if form['amount' + i.IngrID|string].errors %}
+                                            {{ form['amount' + i.IngrID|string](class="form-control form-contro-sm is-invalid")}}
                                             <div class = invalid-feedback>
-                                                {% for error in form['amount' + loop.index0|string].errors %}
+                                                {% for error in form['amount' + i.IngrID|string].errors %}
                                                     <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                         {% else %}
-                                            {{form['amount' + loop.index0|string](class = "form-control form-control-sm amount-input")}}     
+                                            {{form['amount' + i.IngrID|string](class = "form-control form-control-sm amount-input")}}     
                                         {% endif %} 
                 
                                         </td>
                 
 
                                     <td>
-                                    {% if form['unit' + loop.index0|string].errors %}
-                                        {{ form['unit' + loop.index0|string](class="form-control form-contro-sm is-invalid")}}
+                                    {% if form['unit' + i.IngrID|string].errors %}
+                                        {{ form['unit' + i.IngrID|string](class="form-control form-contro-sm is-invalid")}}
                                         <div class = invalid-feedback>
-                                            {% for error in form['unit' + loop.index0|string].errors %}
+                                            {% for error in form['unit' + i.IngrID|string].errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{form['unit' + loop.index0|string](class = "btn btn-secondary dropdown-toggle unit-dropdown")}}     
+                                        {{form['unit' + i.IngrID|string](class = "btn btn-secondary dropdown-toggle unit-dropdown")}}     
                                     {% endif %} 
 
                                     </td>

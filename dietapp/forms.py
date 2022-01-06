@@ -126,8 +126,8 @@ def MealForm(meal):
         ingredient = meal.meal_ingredients[i].ingredient
         units = getUnits(ingredient)
 
-        setattr(F,'amount%d' % i, DecimalField('Amount%d' % i))
-        setattr(F,'unit%d' % i, SelectField('Unit%d' % i, coerce=int,choices=units))
+        setattr(F,'amount%d' % ingredient.id, DecimalField('Amount%d' % ingredient.id))
+        setattr(F,'unit%d' % ingredient.id, SelectField('Unit%d' % ingredient.id, coerce=int,choices=units))
         
 
     d = F()
@@ -151,7 +151,8 @@ def MealForm(meal):
     d.drop_count.data = meal.count_unit_id
 
     for i,mi in enumerate(meal.meal_ingredients):
-        d['amount%d' % i].data=mi.serv
-        d['unit%d' % i].data=mi.unit_id
+        ingredient = meal.meal_ingredients[i].ingredient
+        d['amount%d' % ingredient.id].data=mi.serv
+        d['unit%d' % ingredient.id].data=mi.unit_id
 
     return d
