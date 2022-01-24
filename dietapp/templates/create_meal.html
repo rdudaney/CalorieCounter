@@ -44,30 +44,30 @@
                                     <td>{{i.IngrBrand}}</td>
 
                                     <td>
-                                        {% if form['amount' + i.IngrID|string].errors %}
-                                            {{ form['amount' + i.IngrID|string](class="form-control form-contro-sm is-invalid")}}
+                                        {% if form['amount' + i.MealIngrID|string].errors %}
+                                            {{ form['amount' + i.MealIngrID|string](class="form-control form-contro-sm is-invalid")}}
                                             <div class = invalid-feedback>
-                                                {% for error in form['amount' + i.IngrID|string].errors %}
+                                                {% for error in form['amount' + i.MealIngrID|string].errors %}
                                                     <span>{{ error }}</span>
                                                 {% endfor %}
                                             </div>
                                         {% else %}
-                                            {{form['amount' + i.IngrID|string](class = "form-control form-control-sm amount-input")}}     
+                                            {{form['amount' + i.MealIngrID|string](class = "form-control form-control-sm amount-input")}}     
                                         {% endif %} 
                 
                                         </td>
                 
 
                                     <td>
-                                    {% if form['unit' + i.IngrID|string].errors %}
-                                        {{ form['unit' + i.IngrID|string](class="form-control form-contro-sm is-invalid")}}
+                                    {% if form['unit' + i.MealIngrID|string].errors %}
+                                        {{ form['unit' + i.MealIngrID|string](class="form-control form-contro-sm is-invalid")}}
                                         <div class = invalid-feedback>
-                                            {% for error in form['unit' + i.IngrID|string].errors %}
+                                            {% for error in form['unit' + i.MealIngrID|string].errors %}
                                                 <span>{{ error }}</span>
                                             {% endfor %}
                                         </div>
                                     {% else %}
-                                        {{form['unit' + i.IngrID|string](class = "btn btn-secondary dropdown-toggle unit-dropdown")}}     
+                                        {{form['unit' + i.MealIngrID|string](class = "btn btn-secondary dropdown-toggle unit-dropdown")}}     
                                     {% endif %} 
 
                                     </td>
@@ -226,7 +226,7 @@
             </div>
 
 
-            <a class="btn btn-primary btn-md mb-3" href="{{ url_for('ingredients') }}">Add Ingredient</a>
+            <a class="btn btn-primary btn-md mb-3" href="{{ url_for('add_ingredients_to_meal',meal_id=meal.id) }}">Add Ingredient</a>
 
 
 
@@ -283,7 +283,6 @@
         var tr = textbox.parents('tr');
         var rownumber = tr.index();
 
-
         calculateVals(rownumber);
 
 
@@ -292,7 +291,7 @@
         var dropdown = $(this);
         var tr = dropdown.parents('tr');
         var rownumber = tr.index();
-        
+
         calculateVals(rownumber);
     });
 

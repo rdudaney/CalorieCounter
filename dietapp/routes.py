@@ -193,6 +193,7 @@ def create_ingr_list(meal):
 
 
         d = {}
+        d["MealIngrID"] = mi.id
         d['IngrID'] = mi.ingredient.id
         d['IngrName'] = mi.ingredient.name
         d['IngrBrand'] = mi.ingredient.brand
@@ -259,6 +260,33 @@ def update_meal(meal_id):
 
     return render_template('create_meal.html',title='Meal',form=form, meal=meal, ingr_list=ingr_list, unit_dict = unit_dict)
 
+
+@app.route("/meals/<int:meal_id>/add", methods=['GET','POST'])
+@login_required
+def add_ingredients_to_meal(meal_id):
+    if request.method == 'POST':
+        ingredient_id_list = parse_checkboxes(request.form)
+        add_ingredients(ingredient_id_list, meal_id)
+        flash('Your ingredient have been added', 'success')
+        return redirect(url_for('update_meal',meal_id=meal_id))
+    ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
+    return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
+
+@login_required
+def add_ingredients(ingredient_id_list, meal_id):
+    meal = Meals.query.get_or_404(meal_id)
+    if current_user != meal.author:
+        abort(403)
+    for id in ingredient_id_list:
+        ingredient = Ingredients.query.get_or_404(id)
+        if current_user != ingredient.author:
+            abort(403)
+        #TODO: Fix ingredient serving id error
+        mi = MealIngredients(meal_id=meal_id,ingredient_id=id)
+        db.session.add(mi)
+    db.session.commit()
+    #TODO: Remove  return redirect
+    return redirect(url_for('update_meal',meal_id=meal_id))
 
 @login_required
 def delete_ingredients(ingredient_id_list):
