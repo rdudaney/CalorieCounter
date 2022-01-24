@@ -227,42 +227,10 @@
 
 
             <a class="btn btn-primary btn-md mb-3" href="{{ url_for('add_ingredients_to_meal',meal_id=meal.id) }}">Add Ingredient</a>
-
-
-
-
-
-            <div class="content-section">
-                <h3>Totals</h3>
-                <table class="table table-borderless">
-                    <tbody>
-                        <tr>
-                            <th scope="row">Fat (g)</th>
-                            <td id="TotalFat">{{meal.fat}}</td>
-                            <input type="hidden" id="TotalFatHidden" name="total_fat" value={{meal.fat}}/>
-                        </tr>
-                        <tr>
-                            <th scope="row">Carbs (g)</th>
-                            <td id="TotalCarbs">{{meal.carbs}}</td>
-                            <input type="hidden" id="TotalCarbsHidden" name="total_carbs" value={{meal.carbs}}/>
-                        </tr>
-                        <tr>
-                            <th scope="row">Protein (g)</th>
-                            <td id="TotalProtein">{{meal.protein}}</td>
-                            <input type="hidden" id="TotalProteinHidden" name="total_protein" value={{meal.protein}}/>
-                        </tr>
-                        <tr>
-                            <th scope="row">Calories</th>
-                            <td id="TotalCalories">{{meal.calories}}</td>
-                            <input type="hidden" id="TotalCaloriesHidden" name="total_calories" value={{meal.calories}}/>
-                        </tr>
-                    </tbody>
-    
-                </table>
-            </div>
-
-
-
+            <input type="hidden" id="TotalFatHidden" name="total_fat" value={{meal.fat}}/>
+            <input type="hidden" id="TotalCarbsHidden" name="total_carbs" value={{meal.carbs}}/>
+            <input type="hidden" id="TotalProteinHidden" name="total_protein" value={{meal.protein}}/>
+            <input type="hidden" id="TotalCaloriesHidden" name="total_calories" value={{meal.calories}}/>
 
         </form>
     </div>
@@ -270,7 +238,30 @@
 
 
 {% block sidebar %}
-        
+    <div class="content-section">
+        <h3>Totals</h3>
+        <table class="table table-borderless">
+            <tbody>
+                <tr>
+                    <th scope="row">Fat (g)</th>
+                    <td id="TotalFat">{{meal.fat}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Carbs (g)</th>
+                    <td id="TotalCarbs">{{meal.carbs}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Protein (g)</th>
+                    <td id="TotalProtein">{{meal.protein}}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Calories</th>
+                    <td id="TotalCalories">{{meal.calories}}</td>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
 {% endblock sidebar %}
 
 
