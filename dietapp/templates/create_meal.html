@@ -87,52 +87,6 @@
                 {% endif %}
             </fieldset>
 
-
-
-            <div class ="form-group">
-                {{form.recipe.label(class = "form-control-label")}}
-
-                {% if form.recipe.errors %}
-                    {{ form.recipe(class="form-control form-contro-sm is-invalid")}}
-                    <div class = invalid-feedback>
-                        {% for error in form.recipe.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{form.recipe(class = "form-control form-control-sm")}}  
-                {% endif %} 
-            </div>
-
-            <div class ="form-group">
-                {{form.notes.label(class = "form-control-label")}}
-
-                {% if form.notes.errors %}
-                    {{ form.notes(class="form-control form-contro-lg is-invalid")}}
-                    <div class = invalid-feedback>
-                        {% for error in form.notes.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{form.notes(class = "form-control form-control-lg")}}  
-                {% endif %} 
-            </div>
-
-            <div class ="form-group">
-                {{form.favorite.label(class = "form-control-label")}}
-
-                {% if form.favorite.errors %}
-                    {{ form.favorite(class="form-control form-contro-sm is-invalid")}}
-                    <div class = invalid-feedback>
-                        {% for error in form.favorite.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{form.favorite(class = "form-control form-control-sm")}}  
-                {% endif %} 
-            </div>
             
 
 
@@ -219,6 +173,56 @@
                     {% endif %} 
                 </div>
 
+            </div>
+
+
+
+
+
+
+            <div class ="form-group">
+                {{form.recipe.label(class = "form-control-label")}}
+
+                {% if form.recipe.errors %}
+                    {{ form.recipe(class="form-control form-contro-sm is-invalid")}}
+                    <div class = invalid-feedback>
+                        {% for error in form.recipe.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{form.recipe(class = "form-control form-control-sm")}}  
+                {% endif %} 
+            </div>
+
+            <div class ="form-group">
+                {{form.notes.label(class = "form-control-label")}}
+
+                {% if form.notes.errors %}
+                    {{ form.notes(class="form-control form-contro-lg is-invalid")}}
+                    <div class = invalid-feedback>
+                        {% for error in form.notes.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{form.notes(class = "form-control form-control-lg")}}  
+                {% endif %} 
+            </div>
+
+            <div class ="form-group">
+                {{form.favorite.label(class = "form-control-label")}}
+
+                {% if form.favorite.errors %}
+                    {{ form.favorite(class="form-control form-contro-sm is-invalid")}}
+                    <div class = invalid-feedback>
+                        {% for error in form.favorite.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{form.favorite(class = "form-control form-control-sm")}}  
+                {% endif %} 
             </div>
 
             <div class ="form-group">   
