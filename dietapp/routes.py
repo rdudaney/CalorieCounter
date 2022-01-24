@@ -161,6 +161,7 @@ def update_ingredient(ingredient_id):
         form.serv_volume.data = ingredient.serv_volume
         form.serv_count.data = ingredient.serv_count
 
+
         form.drop_weight.data = ingredient.weight_unit_id
         form.drop_volume.data = ingredient.volume_unit_id
         form.drop_count.data = ingredient.count_unit_id
@@ -282,7 +283,13 @@ def add_ingredients(ingredient_id_list, meal_id):
         if current_user != ingredient.author:
             abort(403)
         #TODO: Fix ingredient serving id error
-        mi = MealIngredients(meal_id=meal_id,ingredient_id=id)
+        if ingredient.weight_unit_id is not None:
+            mi_unit_id = ingredient.weight_unit_id
+        elif ingredient.volume_unit_id is not None:
+            mi_unit_id = ingredient.volume_unit_id
+        elif ingredient.count_unit_id is not None:
+            mi_unit_id = ingredient.count_unit_id
+        mi = MealIngredients(meal_id=meal_id,ingredient_id=id,serv=0,unit_id=mi_unit_id)
         db.session.add(mi)
     db.session.commit()
     #TODO: Remove  return redirect
