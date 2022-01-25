@@ -91,7 +91,7 @@ def convert2list(unit_in):
     return unit_out
 
 
-class MealForm2(FlaskForm):
+class MealForm(FlaskForm):
     name = StringField('Title',validators =[InputRequired()])
     submit = SubmitField('Save Changes')
     recipe = StringField('Recipe')
@@ -121,17 +121,17 @@ class MealForm2(FlaskForm):
 
 
 
-def MealForm(meal):
+def create_MealForm(meal):
 
     for i,mi in enumerate(meal.meal_ingredients):
         ingredient = meal.meal_ingredients[i].ingredient
         units = getUnits(ingredient)
 
-        setattr(MealForm2,'amount%d' % mi.id, DecimalField('Amount%d' % mi.id))
-        setattr(MealForm2,'unit%d' % mi.id, SelectField('Unit%d' % mi.id, coerce=int,choices=units))
+        setattr(MealForm,'amount%d' % mi.id, DecimalField('Amount%d' % mi.id))
+        setattr(MealForm,'unit%d' % mi.id, SelectField('Unit%d' % mi.id, coerce=int,choices=units))
         
 
-    d = MealForm2()
+    d = MealForm()
     d.name.data = meal.name
     d.recipe.data = meal.recipe
     d.notes.data = meal.notes
