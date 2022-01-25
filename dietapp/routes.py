@@ -3,7 +3,7 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort, jsonify
 from dietapp import app, db, bcrypt
-from dietapp.forms import RegistrationForm, LoginForm, IngredientForm, MealForm
+from dietapp.forms import RegistrationForm, LoginForm, IngredientForm, MealForm, create_MealForm
 from dietapp.models import User, Ingredients, Units, UnitType, Meals, MealIngredients
 from flask_login import login_user, current_user, logout_user, login_required
 from collections import namedtuple
