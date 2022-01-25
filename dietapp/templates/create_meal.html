@@ -277,8 +277,9 @@
         var textbox = $(this);
         var tr = textbox.parents('tr');
         var rownumber = tr.index();
+        var mealID = getNumber(textbox.attr('id'));
 
-        calculateVals(rownumber);
+        calculateVals(rownumber, mealID);
 
 
     });
@@ -286,30 +287,39 @@
         var dropdown = $(this);
         var tr = dropdown.parents('tr');
         var rownumber = tr.index();
+        var mealID = getNumber(dropdown.attr('id'));
 
-        calculateVals(rownumber);
+        calculateVals(rownumber, mealID);
     });
 
     $(window).load(function(event){
         calculateTotals();
     });
 
-    function calculateVals(rownumber) {
+    function getNumber(elementName) {
+        var matches = elementName.match(/(\d+)/);
+              
+        if (matches) {
+            return parseInt(matches[0]);
+        }
+    }
+
+    function calculateVals(rownumber, mealID) {
         var ingrTbl = document.getElementById("ingrTable");
         var ingr_list = {{ ingr_list|tojson }};
         var unit_dict = {{ unit_dict|tojson }};
 
-        var tb = document.getElementById("amount" + rownumber);
+        var tb = document.getElementById("amount" + mealID);
         var current_tb_val = parseFloat(tb.value);
 
-        calculateRow(current_tb_val, ingr_list, unit_dict, ingrTable, rownumber)
+        calculateRow(current_tb_val, ingr_list, unit_dict, ingrTable, rownumber, mealID)
         calculateTotals();
     }
 
-    function calculateRow(serving_amount_val, ingr_list, unit_dict, ingrTable, rownumber){
+    function calculateRow(serving_amount_val, ingr_list, unit_dict, ingrTable, rownumber, mealID){
         var ingr = ingr_list[rownumber];
 
-        var unit_dropdown = document.getElementById("unit" + rownumber);
+        var unit_dropdown = document.getElementById("unit" + mealID);
         var unit_dropdown_id = unit_dropdown.options[unit_dropdown.selectedIndex].value;
 
         var unit_selected = unit_dict[unit_dropdown_id];
