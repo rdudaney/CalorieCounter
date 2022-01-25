@@ -82,20 +82,22 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-def fcn_save_ingredient(form):
-    ingredient = Ingredients(brand=form.brand.data, name=form.name.data, 
-        fat=form.fat.data, carbs=form.carbs.data, protein=form.protein.data, calories=form.calories.data, 
-        user_id=current_user.id)
+def fcn_save_new_from_form(form, save_type):
+    if save_type == 'NewIngredient':
+        ingredient = Ingredients(brand=form.brand.data, name=form.name.data, 
+            fat=form.fat.data, carbs=form.carbs.data, protein=form.protein.data, calories=form.calories.data, 
+            user_id=current_user.id)
 
-    ingredient.serv_weight=form.serv_weight.data
-    ingredient.weight_unit_id=form.drop_weight.data
-    ingredient.serv_volume=form.serv_volume.data
-    ingredient.volume_unit_id=form.drop_volume.data
-    ingredient.serv_count=form.serv_count.data
-    ingredient.count_unit_id=form.drop_count.data
-    
-    
-    db.session.add(ingredient)
+        ingredient.serv_weight=form.serv_weight.data
+        ingredient.weight_unit_id=form.drop_weight.data
+        ingredient.serv_volume=form.serv_volume.data
+        ingredient.volume_unit_id=form.drop_volume.data
+        ingredient.serv_count=form.serv_count.data
+        ingredient.count_unit_id=form.drop_count.data
+
+        db.session.add(ingredient)
+
+
     db.session.commit()
 
 def fcn_update_ingredient(form, ingredient_id):
@@ -127,7 +129,7 @@ def new_ingredient():
     form.drop_count.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=3).all()]
 
     if form.validate_on_submit():
-        fcn_save_ingredient(form)
+        fcn_save_new_from_form(form, 'NewIngredient')
         flash('Your ingredient has been added!', 'success')
         return redirect(url_for('ingredients'))
     return render_template('create_ingredient.html',title='New Ingredient', legend='Add Ingredient', form = form)
