@@ -100,22 +100,23 @@ def fcn_save_new_from_form(form, save_type):
 
     db.session.commit()
 
-def fcn_update_ingredient(form, ingredient_id):
-    ingredient = Ingredients.query.get(ingredient_id)
+def fcn_update_from_form(form, id, update_type):
+    if update_type == 'UpdateIngredient':
+        ingredient = Ingredients.query.get(id)
 
-    ingredient.brand=form.brand.data
-    ingredient.name=form.name.data
-    ingredient.fat=form.fat.data
-    ingredient.carbs=form.carbs.data
-    ingredient.protein=form.protein.data
-    ingredient.calories=form.calories.data 
+        ingredient.brand=form.brand.data
+        ingredient.name=form.name.data
+        ingredient.fat=form.fat.data
+        ingredient.carbs=form.carbs.data
+        ingredient.protein=form.protein.data
+        ingredient.calories=form.calories.data 
 
-    ingredient.serv_weight=form.serv_weight.data
-    ingredient.weight_unit_id=form.drop_weight.data
-    ingredient.serv_volume=form.serv_volume.data
-    ingredient.volume_unit_id=form.drop_volume.data
-    ingredient.serv_count=form.serv_count.data
-    ingredient.count_unit_id=form.drop_count.data
+        ingredient.serv_weight=form.serv_weight.data
+        ingredient.weight_unit_id=form.drop_weight.data
+        ingredient.serv_volume=form.serv_volume.data
+        ingredient.volume_unit_id=form.drop_volume.data
+        ingredient.serv_count=form.serv_count.data
+        ingredient.count_unit_id=form.drop_count.data
 
     db.session.commit()
 
@@ -149,7 +150,7 @@ def update_ingredient(ingredient_id):
 
 
     if form.validate_on_submit():
-        fcn_update_ingredient(form, ingredient_id)
+        fcn_update_from_form(form, ingredient_id,'UpdateIngredient')
         flash('Ingredient has been updated', 'success')
         return redirect(url_for('update_ingredient',ingredient_id = ingredient.id))
     elif request.method == 'GET':
@@ -252,6 +253,7 @@ def update_meal(meal_id):
         print("Total Carbs: " + str(request.form.get("total_carbs")))
         print("Total Protein: " + str(request.form.get("total_protein")))
         print("Total Calories: " + str(request.form.get("total_calories")))
+        fcn_update_from_form(form,meal_id,'UpdateMeal')
         #TODO: Update Meal info here
         #TODO: Change create_meal to textfield
         #print(form.TotalFat.data)
