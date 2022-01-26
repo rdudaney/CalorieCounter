@@ -18,16 +18,6 @@ def home():
 
     return render_template('home.html', title='Home')
 
-@app.route('/ingredients', methods=['GET','POST'])
-@login_required
-def ingredients():
-    if request.method == 'POST':
-        #print("Check1: " + str(request.form.get("check1")))
-        #print("Check2: " + str(request.form.get("check2")))
-        ingredient_id_list = parse_checkboxes(request.form)
-        delete_ingredients(ingredient_id_list)
-    ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
-    return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
 
 @app.route('/register', methods=['GET','POST'])
 def register():
@@ -42,7 +32,6 @@ def register():
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html',title='Register', form = form)
-
 
 
 @app.route('/', methods=['GET','POST'])
@@ -61,6 +50,15 @@ def login():
             flash('Login Unsuccessful. Please check email and password', 'danger')
     return render_template('login.html',title='Login', form = form)
 
+
+@app.route('/ingredients', methods=['GET','POST'])
+@login_required
+def ingredients():
+    if request.method == 'POST':
+        ingredient_id_list = parse_checkboxes(request.form)
+        delete_ingredients(ingredient_id_list)
+    ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
+    return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
 
 
 @app.route('/logout')
@@ -122,7 +120,6 @@ def update_ingredient(ingredient_id):
     return render_template('create_ingredient.html',title='Update Ingredient',form=form, legend='Update Ingredient')
 
 
-
 @app.route("/meals")
 @login_required
 def meals():
@@ -148,7 +145,6 @@ def update_meal(meal_id):
         fcn_update_from_form(form,meal_id,'UpdateMeal')
         #TODO: Update Meal info here
         #TODO: Change create_meal to textfield
-        #print(form.TotalFat.data)
         flash('Meal has been updated', 'success')
         return redirect(url_for('update_meal',meal_id = meal.id))
     elif request.method == 'GET':
@@ -180,4 +176,3 @@ def delete_meal(meal_id):
     db.session.commit()
     flash('Your meal has been deleted', 'success')
     return redirect(url_for('meals'))
-

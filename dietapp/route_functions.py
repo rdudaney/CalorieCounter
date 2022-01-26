@@ -7,13 +7,9 @@ def parse_checkboxes(form):
     ingredient_id_list = []
     for v in form:
         id = str(v).split("check")[1]
-        #print (str(v) + ": " + str(form[v]) + " - " + id[1])
         if ("check" in v) and str(form[v]) == 'on':
             ingredient_id_list.append(id)
-            print (str(v) + ": " + str(form[v]) + " - " + id)
 
-
-    print(ingredient_id_list)
     return ingredient_id_list
 
 
