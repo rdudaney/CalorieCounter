@@ -87,7 +87,7 @@ class MealForm(FlaskForm):
     drop_count = SelectField('Unit Count', coerce=int)
 
     def validate(self):
-        if not super(IngredientForm, self).validate():
+        if not super(MealForm, self).validate():
             return False
 
         if self.serv_weight.data is None and self.serv_volume.data is None and self.serv_count.data is None:

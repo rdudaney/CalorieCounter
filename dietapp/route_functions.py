@@ -4,6 +4,7 @@ from flask_login import login_user, current_user, logout_user, login_required
 from flask import render_template, url_for, flash, redirect, request, abort, jsonify
 
 def parse_checkboxes(form):
+    #TODO: Make generic so it just finds the number
     ingredient_id_list = []
     for v in form:
         id = str(v).split("check")[1]
@@ -48,6 +49,23 @@ def fcn_update_from_form(form, id, update_type):
         ingredient.volume_unit_id=form.drop_volume.data
         ingredient.serv_count=form.serv_count.data
         ingredient.count_unit_id=form.drop_count.data
+
+    if update_type == 'UpdateMeal':
+        meal = Meals.query.get(id)
+
+        meal.name = form.name.data
+
+        meal.recipe = form.recipe.data
+        meal.notes = form.notes.data
+        meal.favorite = form.favorite.data
+
+        meal.serv_weight = form.serv_weight.data
+        meal.serv_volume = form.serv_volume.data
+        meal.serv_count = form.serv_count.data
+
+        meal.weight_unit_id = form.drop_weight.data
+        meal.volume_unit_id = form.drop_volume.data
+        meal.count_unit_id = form.drop_count.data
 
     db.session.commit()
 
@@ -142,3 +160,4 @@ def delete_ingredients(ingredient_id_list):
         db.session.commit()
     flash('Your ingredient has been deleted', 'success')
     return redirect(url_for('ingredients'))
+
