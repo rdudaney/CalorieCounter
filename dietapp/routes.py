@@ -134,8 +134,12 @@ def update_meal(meal_id):
     if current_user != meal.author:
         abort(403)
 
-    form = create_MealForm(meal) #TODO Will have to separate creation of form and entry of values due to post vs get
-    
+    create_MealForm(meal)
+    form = MealForm()
+    form.drop_weight.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=1).all()]
+    form.drop_volume.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=2).all()]
+    form.drop_count.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=3).all()]
+
     if form.validate_on_submit():
         print("Total Name: " + str(form.name.data))
         print("Total Fat: " + str(request.form.get("total_fat")))
@@ -148,6 +152,26 @@ def update_meal(meal_id):
         flash('Meal has been updated', 'success')
         return redirect(url_for('update_meal',meal_id = meal.id))
     elif request.method == 'GET':
+
+        form.name.data = meal.name
+        form.recipe.data = meal.recipe
+        form.notes.data = meal.notes
+        form.favorite.data = meal.favorite
+
+        form.serv_weight.data = meal.serv_weight
+        form.serv_volume.data = meal.serv_volume
+        form.serv_count.data = meal.serv_count
+
+        form.drop_weight.data = meal.weight_unit_id
+        form.drop_volume.data = meal.volume_unit_id
+        form.drop_count.data = meal.count_unit_id
+
+        for i,mi in enumerate(meal.meal_ingredients):
+            ingredient = meal.meal_ingredients[i].ingredient
+            form['amount%d' % mi.id].data=mi.serv
+            form['unit%d' % mi.id].data=mi.unit_id
+
+        
         ingr_list = create_ingr_list(meal)
         unit_dict = create_unit_dict()
 

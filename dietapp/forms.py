@@ -68,27 +68,7 @@ class IngredientForm(FlaskForm):
 
 
 
-def getUnits(ingredient):
-    units = []
-    if(ingredient.serv_weight is not None):
-        units += Units.query.filter_by(unit_type_id=1).with_entities(Units.id, Units.name).all()
-    if(ingredient.serv_volume is not None):
-        units += Units.query.filter_by(unit_type_id=2).with_entities(Units.id, Units.name).all()
-    if(ingredient.serv_count is not None):
-        units += Units.query.filter_by(id =ingredient.count_unit_id).with_entities(Units.id, Units.name).all()
 
-    #TODO: Can change this to the way that update_ingredient does it in routes.py
-    units = convert2list(units)
-
-    return units
-
-def convert2list(unit_in):
-    unit_out = []
-    for row in unit_in:
-        new_tuple = (int(row[0]), str(row[1]))
-        unit_out.append(new_tuple)
-
-    return unit_out
 
 
 class MealForm(FlaskForm):
@@ -125,35 +105,31 @@ def create_MealForm(meal):
 
     for i,mi in enumerate(meal.meal_ingredients):
         ingredient = meal.meal_ingredients[i].ingredient
-        units = getUnits(ingredient)
+        units = get_units(ingredient)
 
         setattr(MealForm,'amount%d' % mi.id, DecimalField('Amount%d' % mi.id))
         setattr(MealForm,'unit%d' % mi.id, SelectField('Unit%d' % mi.id, coerce=int,choices=units))
         
 
-    d = MealForm()
-    d.name.data = meal.name
-    d.recipe.data = meal.recipe
-    d.notes.data = meal.notes
-    d.favorite.data = meal.favorite
+def get_units(ingredient):
+    units = []
+    if(ingredient.serv_weight is not None):
+        units += Units.query.filter_by(unit_type_id=1).with_entities(Units.id, Units.name).all()
+    if(ingredient.serv_volume is not None):
+        units += Units.query.filter_by(unit_type_id=2).with_entities(Units.id, Units.name).all()
+    if(ingredient.serv_count is not None):
+        units += Units.query.filter_by(id =ingredient.count_unit_id).with_entities(Units.id, Units.name).all()
+
+    #TODO: Can change this to the way that update_ingredient does it in routes.py
+    units = convert2list(units)
+
+    return units
 
 
-    d.drop_weight.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=1).all()]
-    d.drop_volume.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=2).all()]
-    d.drop_count.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=3).all()]
+def convert2list(unit_in):
+    unit_out = []
+    for row in unit_in:
+        new_tuple = (int(row[0]), str(row[1]))
+        unit_out.append(new_tuple)
 
-
-    d.serv_weight.data = meal.serv_weight
-    d.serv_volume.data = meal.serv_volume
-    d.serv_count.data = meal.serv_count
-
-    d.drop_weight.data = meal.weight_unit_id
-    d.drop_volume.data = meal.volume_unit_id
-    d.drop_count.data = meal.count_unit_id
-
-    for i,mi in enumerate(meal.meal_ingredients):
-        ingredient = meal.meal_ingredients[i].ingredient
-        d['amount%d' % mi.id].data=mi.serv
-        d['unit%d' % mi.id].data=mi.unit_id
-
-    return d
+    return unit_out
