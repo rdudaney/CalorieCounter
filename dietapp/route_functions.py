@@ -26,6 +26,8 @@ def parse_element(form, name):
     return id_list
 
 def fcn_save_new_from_form(form, save_type):
+    id = 0
+
     if save_type == 'NewIngredient':
         ingredient = Ingredients(brand=form.brand.data, name=form.name.data, 
             fat=form.fat.data, carbs=form.carbs.data, protein=form.protein.data, calories=form.calories.data, 
@@ -39,9 +41,22 @@ def fcn_save_new_from_form(form, save_type):
         ingredient.count_unit_id=form.drop_count.data
 
         db.session.add(ingredient)
+        id = ingredient.id
+
+
+    if save_type == 'NewMeal':
+        meal = Meals(user_id=current_user.id)
+        meal.name = 'New Meal'
+        meal.favorite = False
+        meal.obsolete = False
+        db.session.add(meal)
+        db.session.flush()
+        id = meal.id
+        print("New Meal id: " + str(meal.id))
 
 
     db.session.commit()
+    return id
 
 def fcn_update_from_form(form, id, update_type):
     if update_type == 'UpdateIngredient':

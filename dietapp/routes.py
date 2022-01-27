@@ -85,6 +85,14 @@ def new_ingredient():
     return render_template('create_ingredient.html',title='New Ingredient', legend='Add Ingredient', form = form)
 
 
+@app.route("/meals/new", methods=['GET','POST'])
+@login_required
+def new_meal():
+    new_meal_id = fcn_save_new_from_form(None, 'NewMeal')
+    return redirect(url_for('update_meal',meal_id = new_meal_id))
+
+
+
 @app.route("/ingredients/<int:ingredient_id>/update", methods=['GET','POST'])
 @login_required
 def update_ingredient(ingredient_id):
