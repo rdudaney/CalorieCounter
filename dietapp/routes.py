@@ -5,7 +5,8 @@ from flask import render_template, url_for, flash, redirect, request, abort, jso
 from dietapp import app, db, bcrypt
 from dietapp.forms import RegistrationForm, LoginForm, IngredientForm, MealForm, create_MealForm
 from dietapp.models import User, Ingredients, Units, UnitType, Meals, MealIngredients
-from dietapp.route_functions import parse_checkboxes, fcn_save_new_from_form, fcn_update_from_form, create_ingr_list, create_unit_dict, add_ingredients, delete_ingredients
+from dietapp.route_functions import parse_element, fcn_save_new_from_form, fcn_update_from_form, create_ingr_list, \
+    create_unit_dict, add_ingredients, delete_ingredients
 from flask_login import login_user, current_user, logout_user, login_required
 from collections import namedtuple
 
@@ -55,7 +56,7 @@ def login():
 @login_required
 def ingredients():
     if request.method == 'POST':
-        ingredient_id_list = parse_checkboxes(request.form)
+        ingredient_id_list = parse_element(request.form,'check')
         delete_ingredients(ingredient_id_list)
     ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
     return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
@@ -136,6 +137,7 @@ def update_meal(meal_id):
 
     create_MealForm(meal)
     form = MealForm()
+    
     form.drop_weight.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=1).all()]
     form.drop_volume.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=2).all()]
     form.drop_count.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=3).all()]
@@ -165,9 +167,8 @@ def update_meal(meal_id):
         form.drop_weight.data = meal.weight_unit_id
         form.drop_volume.data = meal.volume_unit_id
         form.drop_count.data = meal.count_unit_id
-
+        
         for i,mi in enumerate(meal.meal_ingredients):
-            ingredient = meal.meal_ingredients[i].ingredient
             form['amount%d' % mi.id].data=mi.serv
             form['unit%d' % mi.id].data=mi.unit_id
 
@@ -182,7 +183,7 @@ def update_meal(meal_id):
 @login_required
 def add_ingredients_to_meal(meal_id):
     if request.method == 'POST':
-        ingredient_id_list = parse_checkboxes(request.form)
+        ingredient_id_list = parse_element(request.form,'check')
         add_ingredients(ingredient_id_list, meal_id)
         flash('Your ingredient have been added', 'success')
         return redirect(url_for('update_meal',meal_id=meal_id))

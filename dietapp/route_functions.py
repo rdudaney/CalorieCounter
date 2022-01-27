@@ -3,16 +3,27 @@ from dietapp.models import User, Ingredients, Units, UnitType, Meals, MealIngred
 from flask_login import login_user, current_user, logout_user, login_required
 from flask import render_template, url_for, flash, redirect, request, abort, jsonify
 
-def parse_checkboxes(form):
+def parse_element_wtf(form, name):
     #TODO: Make generic so it just finds the number
-    ingredient_id_list = []
+    id_list = []
     for v in form:
-        id = str(v).split("check")[1]
-        if ("check" in v) and str(form[v]) == 'on':
-            ingredient_id_list.append(id)
+        if (name in v.name):
+            id = str(v.name).split(name)[1]
+            if name != 'check' or str(form[v]) == 'on':
+                id_list.append(id)
 
-    return ingredient_id_list
+    return id_list
 
+def parse_element(form, name):
+    #TODO: Make generic so it just finds the number
+    id_list = []
+    for v in form:
+        if (name in v):
+            id = str(v).split(name)[1]
+            if name != 'check' or str(form[v]) == 'on':
+                id_list.append(id)
+
+    return id_list
 
 def fcn_save_new_from_form(form, save_type):
     if save_type == 'NewIngredient':
@@ -54,7 +65,6 @@ def fcn_update_from_form(form, id, update_type):
         meal = Meals.query.get(id)
 
         meal.name = form.name.data
-
         meal.recipe = form.recipe.data
         meal.notes = form.notes.data
         meal.favorite = form.favorite.data
@@ -66,6 +76,14 @@ def fcn_update_from_form(form, id, update_type):
         meal.weight_unit_id = form.drop_weight.data
         meal.volume_unit_id = form.drop_volume.data
         meal.count_unit_id = form.drop_count.data
+        
+        mi_id_list = parse_element_wtf(form,'amount')
+
+        for mi_id in mi_id_list:
+            mi = MealIngredients.query.get(mi_id)
+            
+            mi.serv = form['amount' + str(mi_id)].data
+            mi.unit_id = form['unit' + str(mi_id)].data
 
     db.session.commit()
 
@@ -104,6 +122,15 @@ def create_ingr_list(meal):
 
         d['ServingUnit'] = serving_unit.name
         d['ServingAmount'] = mi.serv
+
+        print('mi.id: ' + str(mi.id))
+        print('mi.ingredient.fat: ' + str(mi.ingredient.fat))
+        print('mi.serv: ' + str(mi.serv))
+        print('serving_unit.conversion: ' + str(serving_unit.conversion))
+        print('ingr_serving_amount: ' + str(ingr_serving_amount))
+        print('ingr_unit.conversion: ' + str(ingr_unit.conversion))
+
+
         d['ServingFat'] = mi.ingredient.fat * mi.serv * serving_unit.conversion / (ingr_serving_amount * ingr_unit.conversion)
         d['ServingCarbs'] = mi.ingredient.carbs * mi.serv * serving_unit.conversion / (ingr_serving_amount * ingr_unit.conversion)
         d['ServingProtein'] = mi.ingredient.protein * mi.serv * serving_unit.conversion / (ingr_serving_amount * ingr_unit.conversion)
