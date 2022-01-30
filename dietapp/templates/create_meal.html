@@ -231,6 +231,7 @@
 
 
             <a class="btn btn-primary btn-md mb-3" href="{{ url_for('add_ingredients_to_meal',meal_id=meal.id) }}">Add Ingredient</a>
+            <a class="btn btn-primary btn-md mb-3" href="{{ url_for('add_meal_to_ingredients',meal_id=meal.id) }}">Add Meal to Ingredients</a>
             <input type="hidden" id="TotalFatHidden" name="total_fat" value={{meal.fat}}/>
             <input type="hidden" id="TotalCarbsHidden" name="total_carbs" value={{meal.carbs}}/>
             <input type="hidden" id="TotalProteinHidden" name="total_protein" value={{meal.protein}}/>
