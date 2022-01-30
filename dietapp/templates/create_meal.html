@@ -232,10 +232,14 @@
 
             <a class="btn btn-primary btn-md mb-3" href="{{ url_for('add_ingredients_to_meal',meal_id=meal.id) }}">Add Ingredient</a>
             <a class="btn btn-primary btn-md mb-3" href="{{ url_for('add_meal_to_ingredients',meal_id=meal.id) }}">Add Meal to Ingredients</a>
-            <input type="hidden" id="TotalFatHidden" name="total_fat" value={{meal.fat}}/>
+            <!-- <input type="hidden" id="TotalFatHidden" name="total_fat" value={{meal.fat}}/>
             <input type="hidden" id="TotalCarbsHidden" name="total_carbs" value={{meal.carbs}}/>
             <input type="hidden" id="TotalProteinHidden" name="total_protein" value={{meal.protein}}/>
-            <input type="hidden" id="TotalCaloriesHidden" name="total_calories" value={{meal.calories}}/>
+            <input type="hidden" id="TotalCaloriesHidden" name="total_calories" value={{meal.calories}}/> -->
+            {{form.total_protein}}
+            {{form.total_carbs}}
+            {{form.total_fat}}
+            {{form.total_calories}}
 
         </form>
     </div>
@@ -375,10 +379,10 @@
         document.getElementById("TotalProtein").innerHTML = sumProtein.toFixed(1);        
         document.getElementById("TotalCalories").innerHTML = sumCalories.toFixed(1);
 
-        document.getElementById("TotalFatHidden").value = sumFat.toFixed(1);
-        document.getElementById("TotalCarbsHidden").value = sumCarbs.toFixed(1);
-        document.getElementById("TotalProteinHidden").value = sumProtein.toFixed(1);        
-        document.getElementById("TotalCaloriesHidden").value = sumCalories.toFixed(1);
+        document.getElementById("total_fat").value = sumFat.toFixed(1);
+        document.getElementById("total_carbs").value = sumCarbs.toFixed(1);
+        document.getElementById("total_protein").value = sumProtein.toFixed(1);        
+        document.getElementById("total_calories").value = sumCalories.toFixed(1);
     }
 
 </script>

@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, DecimalField, SelectField, FieldList, FormField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, DecimalField, SelectField, FieldList, FormField, HiddenField
 from wtforms.validators import InputRequired, InputRequired, Length, Email, EqualTo, ValidationError, Optional
 from dietapp.models import User
 from dietapp.models import Units
@@ -82,6 +82,11 @@ class MealForm(FlaskForm):
     serv_volume = DecimalField('Serving Size by Volume', validators =[Optional()])
     serv_count = DecimalField('Serving Size by Count/Servings', validators =[Optional()])
 
+    total_protein= HiddenField('total_protein')
+    total_carbs= HiddenField('total_protein')
+    total_fat= HiddenField('total_fat')
+    total_calories= HiddenField('total_calories')
+    
     drop_weight = SelectField('Unit Weight', coerce=int)
     drop_volume = SelectField('Unit Volume', coerce=int)
     drop_count = SelectField('Unit Count', coerce=int)

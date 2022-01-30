@@ -155,10 +155,10 @@ def update_meal(meal_id):
 
     if form.validate_on_submit():
         print("Total Name: " + str(form.name.data))
-        print("Total Fat: " + str(request.form.get("total_fat")))
-        print("Total Carbs: " + str(request.form.get("total_carbs")))
-        print("Total Protein: " + str(request.form.get("total_protein")))
-        print("Total Calories: " + str(request.form.get("total_calories")))
+        print("Total Fat: " + str(form.total_fat.data))
+        print("Total Carbs: " + str(form.total_carbs.data))
+        print("Total Protein: " + str(form.total_protein.data))
+        print("Total Calories: " + str(form.total_calories.data))
         fcn_update_from_form(form,meal_id,'UpdateMeal')
         #TODO: Update Meal info here
         #TODO: Change create_meal to textfield
@@ -170,6 +170,12 @@ def update_meal(meal_id):
         form.recipe.data = meal.recipe
         form.notes.data = meal.notes
         form.favorite.data = meal.favorite
+
+        form.total_protein.data = meal.protein
+        form.total_carbs.data = meal.carbs
+        form.total_fat.data = meal.fat
+        form.total_calories.data = meal.calories
+
 
         form.serv_weight.data = meal.serv_weight
         form.serv_volume.data = meal.serv_volume
@@ -201,7 +207,7 @@ def add_ingredients_to_meal(meal_id):
 @login_required
 def add_meal_to_ingredients(meal_id):
     fcn_update_from_form(None, meal_id,'NewMealToIngredient')
-    redirect(url_for('ingredients'))
+    return redirect(url_for('ingredients'))
 
 
 @app.route("/meals/<int:meal_id>/delete", methods=['POST'])

@@ -87,6 +87,11 @@ def fcn_update_from_form(form, id, update_type):
         meal.serv_volume = form.serv_volume.data
         meal.serv_count = form.serv_count.data
 
+        meal.protein = form.total_protein.data
+        meal.carbs = form.total_carbs.data
+        meal.fat = form.total_fat.data
+        meal.calories = form.total_calories.data
+
         meal.weight_unit_id = form.drop_weight.data
         meal.volume_unit_id = form.drop_volume.data
         meal.count_unit_id = form.drop_count.data
@@ -117,6 +122,7 @@ def fcn_update_from_form(form, id, update_type):
 
 
     db.session.commit()
+    return
 
 
 def create_ingr_list(meal):
