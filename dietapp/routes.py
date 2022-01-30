@@ -197,14 +197,11 @@ def add_ingredients_to_meal(meal_id):
     ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
     return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
 
-
-
 @app.route("/meals/<int:meal_id>/add_meal_to_ingredients", methods=['GET','POST'])
 @login_required
 def add_meal_to_ingredients(meal_id):
-    
-
-    return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
+    fcn_update_from_form(None, meal_id,'NewMealToIngredient')
+    redirect(url_for('ingredients'))
 
 
 @app.route("/meals/<int:meal_id>/delete", methods=['POST'])

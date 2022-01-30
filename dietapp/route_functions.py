@@ -41,6 +41,7 @@ def fcn_save_new_from_form(form, save_type):
         ingredient.count_unit_id=form.drop_count.data
 
         db.session.add(ingredient)
+        db.session.flush()
         id = ingredient.id
 
 
@@ -52,10 +53,6 @@ def fcn_save_new_from_form(form, save_type):
         db.session.add(meal)
         db.session.flush()
         id = meal.id
-
-    if save_type == 'NewIngredientFromMeal':
-        a = 1
-
 
     db.session.commit()
     return id
@@ -101,6 +98,23 @@ def fcn_update_from_form(form, id, update_type):
             
             mi.serv = form['amount' + str(mi_id)].data
             mi.unit_id = form['unit' + str(mi_id)].data
+
+    if update_type == 'NewMealToIngredient':
+        meal = Meals.query.get(id)
+
+        ingredient = Ingredients(brand='HOMEMADE', name=meal.name, 
+            fat=meal.fat, carbs=meal.carbs, protein=meal.protein, calories=meal.calories, 
+            user_id=current_user.id)
+
+        ingredient.serv_weight=meal.serv_weight
+        ingredient.weight_unit_id=meal.weight_unit_id
+        ingredient.serv_volume=meal.serv_volume
+        ingredient.volume_unit_id=meal.volume_unit_id
+        ingredient.serv_count=meal.serv_count
+        ingredient.count_unit_id=meal.count_unit_id
+
+        db.session.add(ingredient)
+
 
     db.session.commit()
 
