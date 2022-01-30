@@ -106,7 +106,6 @@ class MealForm(FlaskForm):
 
 
 def create_MealForm(meal):
-    print('In Create Meal Form')
     for i,mi in enumerate(meal.meal_ingredients):
         ingredient = meal.meal_ingredients[i].ingredient
         units = get_units(ingredient)
