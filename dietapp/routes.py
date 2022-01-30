@@ -5,7 +5,7 @@ from flask import render_template, url_for, flash, redirect, request, abort, jso
 from dietapp import app, db, bcrypt
 from dietapp.forms import RegistrationForm, LoginForm, IngredientForm, MealForm, create_MealForm
 from dietapp.models import User, Ingredients, Units, UnitType, Meals, MealIngredients
-from dietapp.route_functions import parse_element, fcn_save_new_from_form, fcn_update_from_form, create_ingr_list, \
+from dietapp.route_functions import parse_element, parse_element_wtf, fcn_save_new_from_form, fcn_update_from_form, create_ingr_list, \
     create_unit_dict, add_ingredients, delete_ingredients
 from flask_login import login_user, current_user, logout_user, login_required
 from collections import namedtuple
@@ -139,13 +139,12 @@ def meals():
 @app.route("/meals/<int:meal_id>/update", methods=['GET','POST'])
 @login_required
 def update_meal(meal_id):
-    
+
     meal = Meals.query.get_or_404(meal_id)
     if current_user != meal.author:
         abort(403)
 
-    create_MealForm(meal)
-    form = MealForm()
+    form = create_MealForm(meal)
     
     form.drop_weight.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=1).all()]
     form.drop_volume.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=2).all()]
@@ -166,6 +165,7 @@ def update_meal(meal_id):
         flash('Meal has been updated', 'success')
         return redirect(url_for('update_meal',meal_id = meal.id))
     elif request.method == 'GET':
+
         form.name.data = meal.name
         form.recipe.data = meal.recipe
         form.notes.data = meal.notes
