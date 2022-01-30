@@ -52,7 +52,9 @@ def fcn_save_new_from_form(form, save_type):
         db.session.add(meal)
         db.session.flush()
         id = meal.id
-        print("New Meal id: " + str(meal.id))
+
+    if save_type == 'NewIngredientFromMeal':
+        a = 1
 
 
     db.session.commit()
@@ -137,13 +139,6 @@ def create_ingr_list(meal):
 
         d['ServingUnit'] = serving_unit.name
         d['ServingAmount'] = mi.serv
-
-        print('mi.id: ' + str(mi.id))
-        print('mi.ingredient.fat: ' + str(mi.ingredient.fat))
-        print('mi.serv: ' + str(mi.serv))
-        print('serving_unit.conversion: ' + str(serving_unit.conversion))
-        print('ingr_serving_amount: ' + str(ingr_serving_amount))
-        print('ingr_unit.conversion: ' + str(ingr_unit.conversion))
 
 
         d['ServingFat'] = mi.ingredient.fat * mi.serv * serving_unit.conversion / (ingr_serving_amount * ingr_unit.conversion)

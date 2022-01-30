@@ -91,6 +91,10 @@ class MealForm(FlaskForm):
             return False
 
         if self.serv_weight.data is None and self.serv_volume.data is None and self.serv_count.data is None:
+            print('In validate 3: ')
+            print('self.serv_weight.data: ' + str(self.serv_weight.data))
+            print('self.serv_volume.data: ' + str(self.serv_volume.data))
+            print('self.serv_count.data: ' + str(self.serv_count.data))
             msg = 'Must enter at least one serving size'
             self.serv_weight.errors.append(msg)
             self.serv_volume.errors.append(msg)
@@ -102,7 +106,7 @@ class MealForm(FlaskForm):
 
 
 def create_MealForm(meal):
-
+    print('In Create Meal Form')
     for i,mi in enumerate(meal.meal_ingredients):
         ingredient = meal.meal_ingredients[i].ingredient
         units = get_units(ingredient)

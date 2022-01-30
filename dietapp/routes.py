@@ -139,6 +139,7 @@ def meals():
 @app.route("/meals/<int:meal_id>/update", methods=['GET','POST'])
 @login_required
 def update_meal(meal_id):
+    
     meal = Meals.query.get_or_404(meal_id)
     if current_user != meal.author:
         abort(403)
@@ -149,6 +150,9 @@ def update_meal(meal_id):
     form.drop_weight.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=1).all()]
     form.drop_volume.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=2).all()]
     form.drop_count.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=3).all()]
+
+    ingr_list = create_ingr_list(meal)
+    unit_dict = create_unit_dict()
 
     if form.validate_on_submit():
         print("Total Name: " + str(form.name.data))
@@ -162,7 +166,6 @@ def update_meal(meal_id):
         flash('Meal has been updated', 'success')
         return redirect(url_for('update_meal',meal_id = meal.id))
     elif request.method == 'GET':
-
         form.name.data = meal.name
         form.recipe.data = meal.recipe
         form.notes.data = meal.notes
@@ -180,10 +183,6 @@ def update_meal(meal_id):
             form['amount%d' % mi.id].data=mi.serv
             form['unit%d' % mi.id].data=mi.unit_id
 
-        
-        ingr_list = create_ingr_list(meal)
-        unit_dict = create_unit_dict()
-
     return render_template('create_meal.html',title='Meal',form=form, meal=meal, ingr_list=ingr_list, unit_dict = unit_dict)
 
 
@@ -196,6 +195,15 @@ def add_ingredients_to_meal(meal_id):
         flash('Your ingredient have been added', 'success')
         return redirect(url_for('update_meal',meal_id=meal_id))
     ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
+    return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
+
+
+
+@app.route("/meals/<int:meal_id>/add_meal_to_ingredients", methods=['GET','POST'])
+@login_required
+def add_meal_to_ingredients(meal_id):
+    
+
     return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
 
 
