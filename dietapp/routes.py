@@ -132,7 +132,7 @@ def update_ingredient(ingredient_id):
 @app.route("/meals")
 @login_required
 def meals():
-    meals = Meals.query.filter_by(user_id = current_user.id, obsolete = False).all()
+    meals = Meals.query.order_by(Meals.date_created.desc()).filter_by(user_id = current_user.id, obsolete = False).all()
     return render_template('meals.html',title='Meal', meals=meals)
 
 
