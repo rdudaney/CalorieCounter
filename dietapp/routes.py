@@ -5,6 +5,9 @@ from flask import render_template, url_for, flash, redirect, request, abort, jso
 from dietapp import app, db, bcrypt
 from dietapp.forms import RegistrationForm, LoginForm, IngredientForm, MealForm, create_MealForm
 from dietapp.models import User, Ingredients, Units, UnitType, Meals, MealIngredients
+from dietapp.user import UserClass
+from dietapp.ingredient import IngredientClass
+from dietapp.meal import MealClass
 from dietapp.route_functions import parse_element, parse_element_wtf, fcn_save_new_from_form, fcn_update_from_form, create_ingr_list, \
     create_unit_dict, add_ingredients, delete_ingredients
 from flask_login import login_user, current_user, logout_user, login_required
@@ -26,11 +29,9 @@ def register():
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        new_user = User(username = form.username.data, email=form.email.data, password=hashed_pw)
-        db.session.add(new_user)
-        db.session.commit()
-        flash(f'Account created for {form.username.data}!', 'success')
+        user = UserClass(form)
+        user.addUser()
+        flash(f'Account created for {user.username}!', 'success')
         return redirect(url_for('login'))
     return render_template('register.html',title='Register', form = form)
 
