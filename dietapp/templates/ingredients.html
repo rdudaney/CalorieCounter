@@ -5,7 +5,7 @@
         <a class="btn btn-primary btn-md mb-3" href="{{ url_for('new_ingredient') }}">Add New Ingredient</a>
         <input class="btn btn-danger btn-md mb-3" type="submit" value="Delete">
         {% if ingredients %}
-            <table class="table">
+            <table id="dtIngredients" class="table">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col"></th>
@@ -59,4 +59,11 @@
 
 
 {% block javascript %}
+<script type=text/javascript>
+    $(document).ready(function () {
+        $('#dtIngredients').DataTable({
+      "order": [[ 3, "desc" ]]
+      });
+    });
+</script>
 {% endblock javascript %}
