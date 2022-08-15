@@ -80,7 +80,8 @@ def new_ingredient():
     form.drop_count.choices = [(g.id, g.name) for g in Units.query.filter_by(unit_type_id=3).all()]
 
     if form.validate_on_submit():
-        fcn_save_new_from_form(form, 'NewIngredient')
+        ingredient = IngredientClass(form,"form")
+        ingredient.save()
         flash('Your ingredient has been added!', 'success')
         return redirect(url_for('ingredients'))
     return render_template('create_ingredient.html',title='New Ingredient', legend='Add Ingredient', form = form)
@@ -97,8 +98,10 @@ def new_meal():
 @app.route("/ingredients/<int:ingredient_id>/update", methods=['GET','POST'])
 @login_required
 def update_ingredient(ingredient_id):
-    ingredient = Ingredients.query.get_or_404(ingredient_id)
-    if current_user != ingredient.author:
+    ingredient_model = Ingredients.query.get_or_404(ingredient_id)
+    ingredient = IngredientClass(ingredient_model,"model")
+
+    if current_user.id != ingredient.user_id:
         abort(403)
 
     form = IngredientForm()
@@ -108,24 +111,12 @@ def update_ingredient(ingredient_id):
 
 
     if form.validate_on_submit():
-        fcn_update_from_form(form, ingredient_id,'UpdateIngredient')
+        ingredient.update_from_form(form)
+        ingredient.save()
         flash('Ingredient has been updated', 'success')
         return redirect(url_for('update_ingredient',ingredient_id = ingredient.id))
     elif request.method == 'GET':
-        form.brand.data = ingredient.brand
-        form.name.data = ingredient.name
-        form.fat.data = ingredient.fat
-        form.carbs.data = ingredient.carbs
-        form.protein.data = ingredient.protein
-        form.calories.data = ingredient.calories
-        form.serv_weight.data = ingredient.serv_weight
-        form.serv_volume.data = ingredient.serv_volume
-        form.serv_count.data = ingredient.serv_count
-
-
-        form.drop_weight.data = ingredient.weight_unit_id
-        form.drop_volume.data = ingredient.volume_unit_id
-        form.drop_count.data = ingredient.count_unit_id
+        ingredient.add_to_form(form)
 
     return render_template('create_ingredient.html',title='Update Ingredient',form=form, legend='Update Ingredient')
 

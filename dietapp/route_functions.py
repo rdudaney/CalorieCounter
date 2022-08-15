@@ -28,23 +28,6 @@ def parse_element(form, name):
 def fcn_save_new_from_form(form, save_type):
     id = 0
 
-    if save_type == 'NewIngredient':
-        ingredient = Ingredients(brand=form.brand.data, name=form.name.data, 
-            fat=form.fat.data, carbs=form.carbs.data, protein=form.protein.data, calories=form.calories.data, 
-            user_id=current_user.id)
-
-        ingredient.serv_weight=form.serv_weight.data
-        ingredient.weight_unit_id=form.drop_weight.data
-        ingredient.serv_volume=form.serv_volume.data
-        ingredient.volume_unit_id=form.drop_volume.data
-        ingredient.serv_count=form.serv_count.data
-        ingredient.count_unit_id=form.drop_count.data
-
-        db.session.add(ingredient)
-        db.session.flush()
-        id = ingredient.id
-
-
     if save_type == 'NewMeal':
         meal = Meals(user_id=current_user.id)
         meal.name = 'New Meal'
@@ -58,23 +41,6 @@ def fcn_save_new_from_form(form, save_type):
     return id
 
 def fcn_update_from_form(form, id, update_type):
-    if update_type == 'UpdateIngredient':
-        ingredient = Ingredients.query.get(id)
-
-        ingredient.brand=form.brand.data
-        ingredient.name=form.name.data
-        ingredient.fat=form.fat.data
-        ingredient.carbs=form.carbs.data
-        ingredient.protein=form.protein.data
-        ingredient.calories=form.calories.data 
-
-        ingredient.serv_weight=form.serv_weight.data
-        ingredient.weight_unit_id=form.drop_weight.data
-        ingredient.serv_volume=form.serv_volume.data
-        ingredient.volume_unit_id=form.drop_volume.data
-        ingredient.serv_count=form.serv_count.data
-        ingredient.count_unit_id=form.drop_count.data
-
     if update_type == 'UpdateMeal':
         meal = Meals.query.get(id)
 
