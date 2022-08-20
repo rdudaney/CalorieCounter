@@ -20,7 +20,19 @@ def home():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
 
-    return render_template('home.html', title='Home')
+    result = db.engine.execute("SELECT date_eaten, SUM(calories) as daily_calories, SUM(carbs) as daily_carbs, SUM(protein) as daily_protein, SUM(fat) as daily_fat FROM Meals GROUP BY date_eaten ORDER BY date_eaten DESC")
+
+    s= []
+    for row in result:
+        d = {}
+        d["date"] = row[0]
+        d["calories"] = row[1]
+        d["carbs"] = row[2]
+        d["protein"] = row[3]
+        d["fat"] = row[4]
+        s.append(d)
+
+    return render_template('home.html', title='Home', sums=s)
 
 
 @app.route('/register', methods=['GET','POST'])
