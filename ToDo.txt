@@ -1,3 +1,4 @@
 - Add weight tracker
 - Fix Meal Class
 - Add Meal to Session
+- Fix Meal Update ingredient search ccheck box issue
