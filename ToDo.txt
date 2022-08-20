@@ -2,3 +2,4 @@
 - Fix Meal Class
 - Add Meal to Session
 - Fix Meal Update ingredient search ccheck box issue
+- Change dates to local dates
