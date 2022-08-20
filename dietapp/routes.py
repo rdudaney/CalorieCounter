@@ -176,6 +176,8 @@ def update_meal(meal_id):
         form.recipe.data = meal.recipe
         form.notes.data = meal.notes
         form.favorite.data = meal.favorite
+        form.date_eaten.data = meal.date_eaten
+        form.exclude_from_daily.data = meal.exclude_from_daily
 
         form.total_protein.data = meal.protein
         form.total_carbs.data = meal.carbs

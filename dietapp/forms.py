@@ -75,10 +75,11 @@ class IngredientForm(FlaskForm):
 class MealForm(FlaskForm):
     name = StringField('Title',validators =[InputRequired()])
     submit = SubmitField('Save Changes')
-    date_eaten = DateField("Date Made/Eaten",format="%m/%d/%Y", default=datetime.today(), validators =[InputRequired()])
+    date_eaten = DateField("Date Made/Eaten",format="%Y-%m-%d", default=datetime.today(), validators =[InputRequired()])
     recipe = StringField('Recipe')
     notes = TextAreaField('Notes')
     favorite = BooleanField('Favorite')
+    exclude_from_daily = BooleanField('Exclude From Daily Tracking')
 
     serv_weight = DecimalField('Serving Size by Weight', validators =[Optional()])
     serv_volume = DecimalField('Serving Size by Volume', validators =[Optional()])
