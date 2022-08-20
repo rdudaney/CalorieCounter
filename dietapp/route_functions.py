@@ -48,6 +48,8 @@ def fcn_update_from_form(form, id, update_type):
         meal.recipe = form.recipe.data
         meal.notes = form.notes.data
         meal.favorite = form.favorite.data
+        meal.exclude_from_daily = form.exclude_from_daily.data
+        meal.date_eaten = form.date_eaten.data
 
         meal.serv_weight = form.serv_weight.data
         meal.serv_volume = form.serv_volume.data

@@ -20,7 +20,21 @@ def home():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
 
-    return render_template('home.html', title='Home')
+    str_query = "SELECT date_eaten, SUM(calories) as daily_calories, SUM(carbs) as daily_carbs, SUM(protein) as daily_protein, SUM(fat) as daily_fat FROM Meals WHERE exclude_from_daily = False AND user_id = " + str(current_user.id) + " GROUP BY date_eaten ORDER BY date_eaten DESC"
+    result = db.engine.execute(str_query)
+    
+
+    s= []
+    for row in result:
+        d = {}
+        d["date"] = row[0]
+        d["calories"] = row[1]
+        d["carbs"] = row[2]
+        d["protein"] = row[3]
+        d["fat"] = row[4]
+        s.append(d)
+
+    return render_template('home.html', title='Home', sums=s)
 
 
 @app.route('/register', methods=['GET','POST'])
@@ -162,6 +176,8 @@ def update_meal(meal_id):
         form.recipe.data = meal.recipe
         form.notes.data = meal.notes
         form.favorite.data = meal.favorite
+        form.date_eaten.data = meal.date_eaten
+        form.exclude_from_daily.data = meal.exclude_from_daily
 
         form.total_protein.data = meal.protein
         form.total_carbs.data = meal.carbs

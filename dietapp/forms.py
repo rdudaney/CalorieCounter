@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, DecimalField, SelectField, FieldList, FormField, HiddenField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, DecimalField, SelectField, FieldList, FormField, HiddenField, DateField
 from wtforms.validators import InputRequired, InputRequired, Length, Email, EqualTo, ValidationError, Optional
 from dietapp.models import User
 from dietapp.models import Units
+from datetime import datetime
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username',
@@ -74,9 +75,11 @@ class IngredientForm(FlaskForm):
 class MealForm(FlaskForm):
     name = StringField('Title',validators =[InputRequired()])
     submit = SubmitField('Save Changes')
+    date_eaten = DateField("Date Made/Eaten",format="%Y-%m-%d", default=datetime.today(), validators =[InputRequired()])
     recipe = StringField('Recipe')
     notes = TextAreaField('Notes')
     favorite = BooleanField('Favorite')
+    exclude_from_daily = BooleanField('Exclude From Daily Tracking')
 
     serv_weight = DecimalField('Serving Size by Weight', validators =[Optional()])
     serv_volume = DecimalField('Serving Size by Volume', validators =[Optional()])
