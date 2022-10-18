@@ -2,8 +2,12 @@
 
 {% block content %}
     <form method="POST" action="">
-        <a class="btn btn-primary btn-md mb-3" href="{{ url_for('new_ingredient') }}">Add New Ingredient</a>
-        <input class="btn btn-danger btn-md mb-3" type="submit" value="Delete">
+        {% if form_type == 'ingredient' %}
+            <a class="btn btn-primary btn-md mb-3" href="{{ url_for('new_ingredient') }}">Add New Ingredient</a>
+            <input class="btn btn-danger btn-md mb-3" type="submit" value="Delete">
+        {% else %}
+            <input class="btn btn-primary btn-md mb-3" type="submit" value="Add">
+        {% endif %}
         {% if ingredients %}
             <table id="dtIngredients" class="table">
                 <thead class="thead-dark">
