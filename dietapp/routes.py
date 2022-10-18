@@ -74,7 +74,7 @@ def ingredients():
         ingredient_id_list = parse_element(request.form,'check')
         delete_ingredients(ingredient_id_list)
     ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
-    return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
+    return render_template('ingredients.html',title='Ingredients', ingredients=ingredients, form_type="ingredient")
 
 
 @app.route('/logout')
@@ -209,7 +209,7 @@ def add_ingredients_to_meal(meal_id):
         flash('Your ingredient have been added', 'success')
         return redirect(url_for('update_meal',meal_id=meal_id))
     ingredients = Ingredients.query.filter_by(user_id = current_user.id, obsolete = False).all()
-    return render_template('ingredients.html',title='Ingredients', ingredients=ingredients)
+    return render_template('ingredients.html',title='Ingredients', ingredients=ingredients, form_type="meal")
 
 @app.route("/meals/<int:meal_id>/add_meal_to_ingredients", methods=['GET','POST'])
 @login_required
