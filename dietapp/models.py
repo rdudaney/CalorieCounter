@@ -118,6 +118,13 @@ class Meals(db.Model):
 
     meal_ingredients = db.relationship('MealIngredients', backref='meals',lazy=True)
 
+class Weights(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    date_measured = db.Column(db.Date, nullable=False)
+    weight = db.Column(db.Float)
+    body_fat_percent = db.Column(db.Float)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+
     
 
 

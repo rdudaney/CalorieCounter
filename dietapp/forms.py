@@ -106,7 +106,11 @@ class MealForm(FlaskForm):
             return False
         return True
 
-
+class WeightForm(FlaskForm):
+    date_measured = DateField("Date Made/Eaten",format="%Y-%m-%d", default=datetime.today(), validators =[InputRequired()])
+    weight = DecimalField('Weight', validators =[InputRequired()])
+    body_fat_percent = DecimalField('Body Fat Percent', validators =[InputRequired()])
+    submit = SubmitField('Save Changes')
 
 
 def create_MealForm(meal):
