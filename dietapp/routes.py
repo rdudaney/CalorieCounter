@@ -20,7 +20,7 @@ def home():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
 
-    str_query = "SELECT date_eaten, SUM(calories) as daily_calories, SUM(carbs) as daily_carbs, SUM(protein) as daily_protein, SUM(fat) as daily_fat FROM Meals WHERE exclude_from_daily = False AND user_id = " + str(current_user.id) + " GROUP BY date_eaten ORDER BY date_eaten DESC"
+    str_query = "SELECT date_eaten, SUM(calories) as daily_calories, SUM(carbs) as daily_carbs, SUM(protein) as daily_protein, SUM(fat) as daily_fat FROM Meals WHERE exclude_from_daily = False AND obsolete = False AND user_id = " + str(current_user.id) + " GROUP BY date_eaten ORDER BY date_eaten DESC"
     result = db.engine.execute(str_query)
     
 
